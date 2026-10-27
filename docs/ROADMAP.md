@@ -36,12 +36,12 @@ ROADMAP), `content/CONTENT_GUIDE.md`, README inicial, `.gitignore`.
 - GitHub Actions: typecheck, lint, validate-content, tests, build, deploy a Pages.
 
 **Aceptación**
-- [x] Recargar una URL profunda muestra la vista correcta (comprobado en local; en Pages, tras el primer despliegue).
+- [x] Recargar una URL profunda muestra la vista correcta (comprobado en local y en Pages).
 - [x] Contenido inválido (fixtures) hace fallar la validación con mensaje claro.
 - [x] Tests de tolerancia relativa/absoluta, conversión de unidades, coma decimal y unidad ausente.
 - [x] Todos los `verify` del contenido pasan (28/28).
 - [x] KaTeX y mhchem se ven bien en móvil (375 px) y escritorio, claro y oscuro.
-- [x] El workflow solo despliega si todos los checks pasan (pendiente de la primera ejecución en GitHub).
+- [x] El workflow solo despliega si todos los checks pasan (primer despliegue correcto el 2026-10-27).
 
 **Limitaciones conocidas**
 - El progreso no se guarda: recargar reinicia la práctica (Fase 2).
