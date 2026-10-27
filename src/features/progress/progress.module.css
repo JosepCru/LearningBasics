@@ -176,3 +176,22 @@
 .dataBox p:first-child {
   margin-top: 0;
 }
+.dataActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.dataActions label:focus-within {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.importPreview {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--accent-soft);
+}
+.importPreview p:first-child {
+  margin-top: 0;
+}

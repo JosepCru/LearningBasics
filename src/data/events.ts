@@ -28,7 +28,7 @@ export async function appendEvent<T extends EventType>(
   return db.transaction('rw', [db.events, db.outbox, db.cardStates, db.meta], async () => {
     const event = AppEvent.parse({
       id: uuidv7(now.getTime()),
-      userId: LOCAL_USER,
+      userId: (await boundAccount(db)) ?? LOCAL_USER,
       deviceId: await deviceId(db),
       type,
       clientCreatedAt: now.toISOString(),
@@ -79,6 +79,71 @@ function cardRowFrom(cardId: string, reviews: AppEvent[]): CardRow | undefined {
   if (!state) return undefined;
   const firstReviewAt = inputs.map((r) => r.reviewedAt).sort()[0]!;
   return { cardId, state, due: state.due, firstReviewAt };
+}
+
+export type IngestResult = { added: number; existing: number };
+
+/**
+ * Incorpora eventos ya validados que vienen de fuera (servidor o importación).
+ * Une por ID: los existentes se ignoran y nunca se modifica ni borra nada.
+ * Con `enqueue`, los nuevos se encolan para subirlos (importación); los que llegan del
+ * servidor no, porque ya están allí.
+ */
+export async function ingestEvents(
+  db: LearningDB,
+  incoming: readonly AppEvent[],
+  opts: { enqueue: boolean },
+): Promise<IngestResult> {
+  return db.transaction('rw', [db.events, db.outbox, db.cardStates], async () => {
+    const unique = [...new Map(incoming.map((e) => [e.id, e])).values()];
+    const found = await db.events.bulkGet(unique.map((e) => e.id));
+    const fresh = unique.filter((_, i) => !found[i]);
+    if (fresh.length === 0) return { added: 0, existing: unique.length };
+
+    await db.events.bulkAdd(fresh);
+    if (opts.enqueue) {
+      await db.outbox.bulkPut(
+        fresh.map((e) => ({ eventId: e.id, createdAt: e.clientCreatedAt, attempts: 0, nextAttemptAt: e.clientCreatedAt })),
+      );
+    }
+
+    // Tarjetas afectadas: se reproducen enteras (los eventos pueden llegar en cualquier orden).
+    const cards = new Set<string>();
+    const voidTargets: string[] = [];
+    for (const e of fresh) {
+      if (e.type === 'review') cards.add(e.payload.cardId);
+      if (e.type === 'void') voidTargets.push(e.payload.targetEventId);
+    }
+    for (const target of await db.events.bulkGet(voidTargets)) {
+      if (target?.type === 'review') cards.add(target.payload.cardId);
+    }
+    for (const cardId of cards) await rebuildCard(db, cardId);
+    return { added: fresh.length, existing: unique.length - fresh.length };
+  });
+}
+
+/**
+ * Vincula la base local a una cuenta. La primera vez, los eventos creados sin sesión
+ * (`userId: 'local'`) pasan a ser de esa cuenta. Si el dispositivo ya pertenece a otra
+ * cuenta, devuelve false y no toca nada.
+ */
+export async function bindAccount(db: LearningDB, userId: string): Promise<boolean> {
+  return db.transaction('rw', [db.meta, db.events], async () => {
+    const bound = (await db.meta.get('accountId'))?.value;
+    if (bound === userId) return true;
+    if (typeof bound === 'string') return false;
+    await db.events.toCollection().modify((e) => {
+      if (e.userId === LOCAL_USER) e.userId = userId;
+    });
+    await db.meta.put({ key: 'accountId', value: userId });
+    return true;
+  });
+}
+
+/** Cuenta vinculada a este dispositivo, si la hay. */
+export async function boundAccount(db: LearningDB): Promise<string | undefined> {
+  const v = (await db.meta.get('accountId'))?.value;
+  return typeof v === 'string' ? v : undefined;
 }
 
 /** Recalcula todas las proyecciones desde los eventos (tras importar o migrar). */

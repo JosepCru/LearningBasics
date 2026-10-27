@@ -60,8 +60,9 @@ Implementado en `src/data/` (Fase 2):
 | `cardStates` | `cardId`, `due` | Proyección: estado FSRS de cada tarjeta + `firstReviewAt` |
 | `meta` | `key` | `deviceId` |
 
-Previstas para la Fase 3: `quarantine` (eventos rechazados por el servidor) y `syncState`
-(cursor, último éxito, último error).
+v2 (Fase 3) añade `quarantine` (`eventId`, `direction`): eventos que el servidor rechazó o
+que llegaron sin cumplir el esquema. El estado de sincronización vive en `meta` (`sync`,
+`accountId`). La migración v1 → v2 tiene test (`import.test.ts`).
 
 - Crear un evento y su entrada en `outbox` ocurre en **una sola transacción**
   (`appendEvent` en `src/data/events.ts`), junto con la actualización de proyecciones.
@@ -77,10 +78,12 @@ Previstas para la Fase 3: `quarantine` (eventos rechazados por el servidor) y `s
 
 ### Antes de iniciar sesión
 
-Los eventos se crean con `userId: 'local'`. Al iniciar sesión por primera vez se
-reasignan al `auth.uid()` en una transacción local antes de subir nada. Si en un
-dispositivo se inicia sesión con una cuenta distinta a la de eventos ya subidos, la app
-pide confirmación y no mezcla datos.
+Los eventos se crean con `userId: 'local'`. En la primera sincronización con sesión, el
+dispositivo queda **vinculado** a esa cuenta (`meta.accountId`) y sus eventos locales pasan a
+ella en una transacción (`bindAccount`). Si después se inicia sesión con **otra** cuenta, la
+sincronización se detiene (estado «Otra cuenta en este dispositivo») y no mezcla datos.
+Cerrar sesión no borra nada. Limitación: aún no hay botón para desvincular el dispositivo;
+la salida es exportar una copia.
 
 ## Motor de sincronización (`src/sync`)
 
@@ -94,7 +97,7 @@ Arranque, evento `online`, `visibilitychange` a visible, 3 s después de la últ
 `navigator.locks.request('learningbasics-sync', ...)` garantiza un único ciclo activo entre
 pestañas del mismo navegador. Dentro de una pestaña, una bandera evita ciclos solapados.
 
-### Ciclo
+### Ciclo (`src/sync/engine.ts`; probado con un servidor simulado en `engine.test.ts`)
 
 ```
 1. si no hay sesión válida → estado 'signed-out', fin
@@ -111,7 +114,7 @@ pestañas del mismo navegador. Dentro de una pestaña, una bandera evita ciclos 
 
 - **Idempotencia del push**: el `id` existe antes del primer intento; reenviar un lote ya
   aceptado no crea duplicados.
-- **Margen del pull** (`MARGEN = 500`): `seq` lo asigna una secuencia de Postgres, pero
+- **Margen del pull** (`pullOverlap = 100` filas): `seq` lo asigna una secuencia de Postgres, pero
   las transacciones pueden confirmarse fuera de orden. Releer un solape y deduplicar por
   `id` evita perder eventos sin coordinación adicional.
 
@@ -122,7 +125,14 @@ pestañas del mismo navegador. Dentro de una pestaña, una bandera evita ciclos 
 | Sin red / timeout / 5xx / 429 | Backoff exponencial con jitter: 2 s, 4 s, … máx. 5 min | "Sin conexión" o "Reintentando…" |
 | 401 / sesión caducada | Pausar sync; pedir iniciar sesión | "Inicia sesión para sincronizar" |
 | 4xx de validación / constraint | Mover el evento a `quarantine`; seguir con el resto | "1 cambio no se pudo sincronizar · Ver" |
-| Error inesperado del cliente | Registrar en `syncState.lastError`; reintentar con backoff | "Error de sincronización · Reintentar" |
+| Error inesperado del cliente | Registrar en `meta.sync.lastError`; se reintenta en el siguiente disparo | "Error de sincronización" |
+
+Si el servidor rechaza un lote entero (4xx), sus eventos se suben uno a uno: solo el culpable
+va a cuarentena. «Sincronizar ahora» ignora la espera entre reintentos.
+
+El estado (`cursor`, `lastSuccessAt`, `lastError`) se guarda en `meta`, clave `sync`. Los
+eventos entrantes que no cumplen el esquema (p. ej. de una versión futura de la app) van a
+cuarentena con `direction: 'incoming'` y no se aplican.
 
 Los fallos parciales son seguros: cada lote es atómico en el servidor y el outbox se
 limpia solo después del éxito. Un corte entre ambos solo provoca un reenvío idempotente.
@@ -165,7 +175,7 @@ Estimación: ~100–200 eventos/día → decenas de MB en 5 años. Mitigación p
 falta (fuera del alcance inicial): eventos `snapshot` periódicos de proyecciones para
 acelerar la primera sincronización de un dispositivo nuevo.
 
-## Tests requeridos (Fase 3)
+## Tests (implementados en `src/sync/engine.test.ts` y `src/data/import.test.ts`)
 
 - Offline → online sube todo el outbox exactamente una vez.
 - Reintento tras fallo a mitad de lote no duplica.

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { exportEvents, exportFileName, downloadJson } from '../../data/backup';
+import { applyImport, downloadJson, exportEvents, exportFileName, previewImport, type ImportPreview } from '../../data/backup';
 import { db } from '../../data/instance';
+import { requestSync } from '../../sync/manager';
 import { ElementTile } from '../../ui/ElementTile';
 import { Status } from '../../ui/Status';
 import { useDocumentTitle } from '../../ui/useDocumentTitle';
@@ -169,6 +170,35 @@ function DataSection() {
   const events = useEventCount();
   const pending = useOutboxCount();
   const [message, setMessage] = useState<string | null>(null);
+  const [preview, setPreview] = useState<ImportPreview | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const chooseFile = async (file: File | undefined) => {
+    setMessage(null);
+    setPreview(null);
+    if (!file) return;
+    const parsed = await previewImport(db, await file.text());
+    if (parsed.ok) setPreview(parsed.preview);
+    else setMessage(parsed.error);
+  };
+
+  const confirmImport = async () => {
+    if (!preview) return;
+    setBusy(true);
+    try {
+      // Red de seguridad: copia del estado actual antes de tocar nada.
+      downloadJson(await exportEvents(db), exportFileName().replace('.export.json', '-antes-de-importar.export.json'));
+      const result = await applyImport(db, preview);
+      setMessage(`Importados ${result.added} registros nuevos (${result.existing} ya estaban).`);
+      setPreview(null);
+      requestSync();
+    } catch (e) {
+      console.error(e);
+      setMessage('No se pudo importar. Tus datos no han cambiado.');
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const exportNow = async () => {
     try {
@@ -188,15 +218,51 @@ function DataSection() {
       </h2>
       <div className={styles.dataBox}>
         <p>
-          Tu historial se guarda en este navegador: {events ?? '…'} registros.{' '}
-          {pending ? `${pending} pendientes de sincronizar (la sincronización entre dispositivos llega en la próxima fase).` : ''}
+          Tu historial se guarda en este navegador: {events ?? '…'} registros
+          {pending ? `, ${pending} pendientes de subir` : ''}. <Link to="/account">Sincronización</Link>
         </p>
         <p className={styles.meta}>
-          Si borras los datos del sitio o usas modo privado, se pierden. Descarga una copia de vez en cuando.
+          Si borras los datos del sitio o usas modo privado sin haber sincronizado, se pierden. Descarga una copia de
+          vez en cuando.
         </p>
-        <button className="btn" onClick={() => void exportNow()}>
-          Descargar copia (JSON)
-        </button>
+        <div className={styles.dataActions}>
+          <button className="btn" onClick={() => void exportNow()}>
+            Descargar copia (JSON)
+          </button>
+          <label className="btn">
+            Importar copia…
+            <input
+              type="file"
+              accept="application/json,.json"
+              className="visually-hidden"
+              onChange={(e) => {
+                void chooseFile(e.target.files?.[0]);
+                e.target.value = '';
+              }}
+            />
+          </label>
+        </div>
+        {preview && (
+          <div className={styles.importPreview} role="region" aria-label="Vista previa de la importación">
+            <p>
+              Copia del {dateFmt.format(new Date(preview.exportedAt))}: <strong>{preview.fresh}</strong> registros nuevos,{' '}
+              {preview.existing} que ya tienes
+              {preview.invalid ? ` y ${preview.invalid} no válidos que se ignorarán` : ''}.
+            </p>
+            <p className={styles.meta}>
+              Importar solo añade: nunca borra ni cambia lo que ya tienes. Antes se descargará una copia de tu estado
+              actual.
+            </p>
+            <div className={styles.dataActions}>
+              <button className="btn btn-primary" disabled={busy || preview.fresh === 0} onClick={() => void confirmImport()}>
+                {preview.fresh === 0 ? 'Nada que importar' : `Importar ${preview.fresh} registros`}
+              </button>
+              <button className="btn" onClick={() => setPreview(null)}>
+                Cancelar
+              </button>
+            </div>
+          </div>
+        )}
         {message && (
           <p role="status" className={styles.meta}>
             {message}

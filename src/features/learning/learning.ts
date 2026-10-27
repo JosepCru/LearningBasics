@@ -12,13 +12,19 @@ import { buildReviewQueue, type ReviewQueue } from '../../core/scheduling/queue'
 import type { CardRow } from '../../data/db';
 import { appendEvent } from '../../data/events';
 import { db } from '../../data/instance';
+import { readSyncMeta } from '../../sync/engine';
+import { requestSync, syncStore, type SyncState } from '../../sync/manager';
 import { manifest } from '../content/content';
+import { useSyncExternalStore } from 'react';
 
 /* ---------- Escritura ---------- */
 
-export const recordAttempt = (p: AttemptPayload) => appendEvent(db, 'attempt', p);
-export const recordReview = (p: ReviewPayload) => appendEvent(db, 'review', p);
-export const recordLesson = (p: LessonPayload) => appendEvent(db, 'lesson', p);
+// Tras guardar en local, se pide una sincronización (agrupada; no hace nada sin sesión).
+const andSync = <T>(p: Promise<T>) => p.then((v) => (requestSync(), v));
+
+export const recordAttempt = (p: AttemptPayload) => andSync(appendEvent(db, 'attempt', p));
+export const recordReview = (p: ReviewPayload) => andSync(appendEvent(db, 'review', p));
+export const recordLesson = (p: LessonPayload) => andSync(appendEvent(db, 'lesson', p));
 
 /* ---------- Lectura ---------- */
 
@@ -65,6 +71,18 @@ export function useOutboxCount(): number | undefined {
 
 export function useEventCount(): number | undefined {
   return useLiveQuery(() => db.events.count());
+}
+
+export function useQuarantineCount(): number | undefined {
+  return useLiveQuery(() => db.quarantine.count());
+}
+
+/** Estado de sincronización: fase en memoria + última sincronización guardada. */
+export function useSyncState(): SyncState & { pending?: number; storedLastSuccessAt?: string } {
+  const live = useSyncExternalStore(syncStore.subscribe, syncStore.getSnapshot);
+  const pending = useOutboxCount();
+  const meta = useLiveQuery(() => readSyncMeta(db));
+  return { ...live, pending, storedLastSuccessAt: live.lastSuccessAt ?? meta?.lastSuccessAt };
 }
 
 /** Objetivos de cada lección, a partir del manifiesto. */

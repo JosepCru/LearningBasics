@@ -42,17 +42,42 @@ jobs:
       - name: Tests
         run: npm test
 
+      # Configuración PÚBLICA de Supabase (Settings → Secrets and variables → Actions →
+      # Variables). Si no existe, la app se compila sin sincronización.
       - name: Build de producción
         run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
+
+      - name: Sin secretos en el bundle
+        run: npm run check-secrets
 
       - uses: actions/upload-pages-artifact@v5
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         with:
           path: dist
 
+  database:
+    name: Base de datos (migraciones y RLS)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: supabase/setup-cli@v3
+        with:
+          version: 2.120.0
+
+      # Arranca solo Postgres local (Docker) y aplica supabase/migrations.
+      - name: Arrancar Postgres con las migraciones
+        run: supabase db start
+
+      - name: Tests de seguridad (pgTAP)
+        run: supabase test db
+
   deploy:
     name: Desplegar en GitHub Pages
-    needs: check
+    needs: [check, database]
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:

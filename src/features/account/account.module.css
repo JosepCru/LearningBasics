@@ -1,0 +1,161 @@
+.page {
+  max-width: 620px;
+}
+
+.title {
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  letter-spacing: -0.015em;
+  margin: 0.5rem 0 1.25rem;
+}
+
+.box {
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.box > p:first-child {
+  margin-top: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.form p {
+  margin: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 100%;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.input {
+  width: 100%;
+  max-width: 22rem;
+  min-height: 48px;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 400;
+  font-size: 1.05rem;
+}
+.code {
+  max-width: 11rem;
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  letter-spacing: 0.25em;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.facts {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0.75rem 0;
+}
+.facts div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.facts dt {
+  color: var(--muted);
+}
+.facts dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+
+.error {
+  color: var(--incorrect);
+  font-weight: 600;
+  margin: 1rem 0 0;
+}
+
+.meta,
+.note {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.note {
+  margin-top: 1.5rem;
+}
+
+/* Indicador de la cabecera */
+.indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 14rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.indicator:hover {
+  color: var(--ink);
+  border-color: var(--muted);
+}
+.indicatorText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dot {
+  flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.tone-ok {
+  color: var(--correct);
+}
+.tone-busy {
+  color: var(--accent);
+}
+.tone-warn {
+  color: var(--warn);
+}
+.tone-error {
+  color: var(--incorrect);
+  font-weight: 600;
+}
+.tone-muted {
+  color: var(--muted);
+}
+
+@media (max-width: 560px) {
+  .indicatorText {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .indicator {
+    padding: 0.55rem;
+  }
+}

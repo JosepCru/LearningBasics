@@ -27,6 +27,16 @@ export type CardRow = {
 
 export type MetaRow = { key: string; value: unknown };
 
+/** Evento que no se pudo sincronizar o importar: se aparta para no bloquear el resto. */
+export type QuarantineRow = {
+  eventId: string;
+  direction: 'outgoing' | 'incoming';
+  /** El evento tal cual (puede no cumplir el esquema si es entrante). */
+  event: unknown;
+  error: string;
+  at: string;
+};
+
 export const SCHEMA_V1 = {
   // `payload.cardId` solo existe en los repasos: IndexedDB omite del índice los demás.
   events: 'id, type, clientCreatedAt, payload.cardId',
@@ -35,15 +45,23 @@ export const SCHEMA_V1 = {
   meta: 'key',
 } as const;
 
+/** v2 (Fase 3): cuarentena de sincronización. Sin cambios en las tablas existentes. */
+export const SCHEMA_V2 = {
+  ...SCHEMA_V1,
+  quarantine: 'eventId, direction',
+} as const;
+
 export class LearningDB extends Dexie {
   events!: EntityTable<AppEvent, 'id'>;
   outbox!: EntityTable<OutboxEntry, 'eventId'>;
   cardStates!: EntityTable<CardRow, 'cardId'>;
   meta!: EntityTable<MetaRow, 'key'>;
+  quarantine!: EntityTable<QuarantineRow, 'eventId'>;
 
   constructor(name = 'learningbasics') {
     super(name);
     this.version(1).stores(SCHEMA_V1);
+    this.version(2).stores(SCHEMA_V2);
   }
 }
 

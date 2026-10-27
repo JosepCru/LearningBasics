@@ -1,4 +1,5 @@
 import { HashRouter, Route, Routes } from 'react-router';
+import { AccountPage } from '../features/account/AccountPage';
 import { LessonPage } from '../features/lessons/LessonPage';
 import { TopicPage } from '../features/lessons/TopicPage';
 import { PracticePage } from '../features/practice/PracticePage';
@@ -25,6 +26,7 @@ export function App() {
           <Route path="practice/:topicId" element={<PracticePage />} />
           <Route path="review" element={<ReviewPage />} />
           <Route path="progress" element={<ProgressPage />} />
+          <Route path="account" element={<AccountPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

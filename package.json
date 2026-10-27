@@ -16,6 +16,7 @@
     "preview": "vite preview",
     "typecheck": "npm run content:build && tsc --noEmit",
     "lint": "eslint .",
+    "check-secrets": "tsx scripts/check-secrets.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -23,6 +24,7 @@
     "katex": "$katex"
   },
   "dependencies": {
+    "@supabase/supabase-js": "2.117.3",
     "dexie": "4.4.7",
     "dexie-react-hooks": "4.4.0",
     "katex": "0.19.1",

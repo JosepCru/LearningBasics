@@ -11,8 +11,9 @@ Funcionará sin conexión y sincronizará el progreso entre dispositivos.
 
 **Fase 2 completada**: lecciones y ejercicios de química (3 temas, 9 lecciones,
 28 ejercicios, 20 flashcards), historial guardado en el navegador, repaso con FSRS,
-progreso por objetivo y copia de seguridad en JSON. La sincronización entre dispositivos
-llega en la Fase 3. Ver [docs/ROADMAP.md](docs/ROADMAP.md).
+progreso por objetivo y copia de seguridad en JSON. **Fase 3 en curso**: el código de
+cuenta y sincronización está listo; para activarlo hay que configurar Supabase siguiendo
+[docs/DEPLOY.md](docs/DEPLOY.md). Ver [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ### Cómo se usa
 
@@ -47,6 +48,7 @@ compila al arrancar).
 | `npm run validate-content -- --update-lock` | Igual, y registra los IDs nuevos en `content/ids.lock.json` |
 | `npm test` | Ejecuta todos los tests (Vitest) |
 | `npm run lint` | Revisa el código con ESLint (incluidas las reglas entre capas) |
+| `npm run check-secrets` | Tras el build: falla si hay secretos en `dist/` o un `.env` versionado |
 | `npm run typecheck` | Comprueba los tipos de TypeScript |
 | `npm run build` | Build de producción en `dist/` |
 | `npm run preview` | Sirve `dist/` en local para probar el build |
@@ -59,6 +61,12 @@ Lee [content/CONTENT_GUIDE.md](content/CONTENT_GUIDE.md). Resumen del flujo:
 2. `npm run validate-content` hasta que no haya errores.
 3. Si añadiste elementos nuevos: `npm run validate-content -- --update-lock`.
 4. Commit de `content/` **y** de `content/ids.lock.json`.
+
+## Sincronización (Supabase)
+
+Opcional. Sin configurarla, la app guarda todo en el navegador. Para sincronizar entre
+dispositivos, sigue [docs/DEPLOY.md](docs/DEPLOY.md): crear el proyecto, aplicar la
+migración, configurar el correo con código y añadir dos *Variables* públicas en GitHub.
 
 ## Despliegue en GitHub Pages
 

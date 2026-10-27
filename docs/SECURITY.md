@@ -17,7 +17,10 @@ ni en una variable `VITE_*`.
 
 ## Row Level Security
 
-Todas las tablas con datos de usuario tienen RLS activado. Tabla inicial:
+Todas las tablas con datos de usuario tienen RLS activado. La definición vigente está en
+[`supabase/migrations/`](../supabase/migrations/); resumen de la tabla inicial (la migración
+añade además permisos de inserción **por columna**, para que el cliente no pueda fijar
+`seq` ni `received_at`, y `check` de tamaño y tipo de `payload`):
 
 ```sql
 create table public.events (
@@ -47,19 +50,31 @@ revoke update, delete, truncate on public.events from anon, authenticated;
   que el historial es append-only.
 - `(select auth.uid())` en lugar de `auth.uid()` evita reevaluar la función por fila.
 
-### Tests de políticas (pgTAP, `supabase/tests/`)
+### Tests de políticas (pgTAP, `supabase/tests/database/events_rls.test.sql`)
 
-En CI con la Supabase CLI local (Docker):
+En CI (job «Base de datos») con la Supabase CLI y Postgres en Docker; el despliegue depende
+de que pasen:
 
-- Usuario A lee solo sus filas; no ve las de B.
-- Usuario A no puede insertar con `user_id` de B.
+- RLS activado y ninguna política de UPDATE/DELETE.
+- Usuario A inserta y lee lo suyo; no puede insertar con `user_id` de B.
+- B no ve las filas de A.
+- Reenviar un evento existente con `ON CONFLICT DO NOTHING` no falla ni duplica.
 - Nadie puede hacer `update` ni `delete`.
+- El cliente no puede fijar `seq` ni `received_at`.
 - El rol `anon` no lee ni inserta nada.
 - Payload > 16 KB y `type` desconocido se rechazan.
 
+### Control de secretos en CI
+
+`npm run check-secrets` (tras el build) falla si `dist/` contiene una clave `service_role`
+(JWT con ese rol), una `sb_secret_…` o una clave privada PEM, o si hay un `.env` versionado
+(salvo `.env.example`). La clave anon/publishable sí está permitida: es pública.
+
 ## Autenticación
 
-- Código OTP de 6 dígitos por email (Supabase Auth).
+- Código OTP de 6 dígitos por email (Supabase Auth). La plantilla «Magic Link» debe incluir
+  `{{ .Token }}` (ver [DEPLOY.md](DEPLOY.md)). La sesión se guarda en `localStorage`
+  (`lb-auth`) y se renueva sola; cerrar sesión es solo en este dispositivo.
 - **Site URL** y **Redirect URLs** permitidas:
   - `https://josepcru.github.io/LearningBasics/`
   - `http://localhost:5173/LearningBasics/`

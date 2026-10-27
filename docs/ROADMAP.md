@@ -9,7 +9,7 @@ No se empieza una fase hasta que la anterior está probada y explicada.
 | 0 — Arquitectura y especificación | ✅ Completada |
 | 1 — Shell, sistema de contenido, lecciones y ejercicios de química | ✅ Completada |
 | 2 — Persistencia local, historial, flashcards y progreso | ✅ Completada |
-| 3 — Autenticación Supabase y sincronización | Pendiente |
+| 3 — Autenticación Supabase y sincronización | 🟡 Código completo; falta configurar Supabase y la prueba con dos dispositivos |
 | 4 — Dashboard diario, plan de estudio y temporizador | Pendiente |
 | 5 — PWA, offline, backup/restore, accesibilidad y endurecimiento | Pendiente |
 
@@ -80,10 +80,18 @@ MASTERY.md; exportación JSON.
 indicador de estado; cuarentena; importación con fusión.
 
 **Aceptación**
-- [ ] Tests pgTAP de RLS pasan en CI.
-- [ ] Tests de sync de SYNC.md pasan.
-- [ ] Prueba manual: dos navegadores, uno offline, convergen al reconectar.
-- [ ] Ningún secreto en el bundle (comprobación en CI).
+- [ ] Tests pgTAP de RLS pasan en CI (escritos; se ejecutan en el primer push).
+- [x] Tests de sync de SYNC.md pasan (servidor simulado).
+- [ ] Prueba manual: dos navegadores, uno offline, convergen al reconectar (requiere el proyecto Supabase).
+- [x] Ningún secreto en el bundle (`npm run check-secrets` en CI).
+- [x] Importación con vista previa, copia previa automática y fusión segura.
+- [x] Migración de la base local v1 → v2 con test.
+
+**Limitaciones conocidas**
+- El flujo de inicio de sesión no se ha probado contra un Supabase real todavía.
+- No hay botón para desvincular un dispositivo de una cuenta.
+- La importación en el navegador se probó hasta la vista previa; aplicar la importación está cubierto por tests unitarios.
+- El código del correo depende de editar la plantilla «Magic Link» en Supabase (DEPLOY.md).
 
 ## Fase 4 — Dashboard, plan diario y temporizador
 

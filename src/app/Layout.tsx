@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
+import { SyncIndicator } from '../features/account/SyncIndicator';
 import { manifest } from '../features/content/content';
 import { useNow, useReviewQueue } from '../features/learning/learning';
 import { ErrorBoundary } from '../ui/ErrorBoundary';
@@ -55,6 +56,7 @@ export function Layout() {
             </NavLink>
           ))}
         </nav>
+        <SyncIndicator />
         <label className={styles.theme}>
           <span className="visually-hidden">Tema</span>
           <select value={theme} onChange={(e) => setTheme(e.target.value as ThemeChoice)}>

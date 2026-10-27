@@ -27,6 +27,10 @@ Cada decisión indica su estado. Para cambiar una decisión, añade una entrada 
 | D-021 | Máximo 10 tarjetas nuevas al día (`REVIEW_DEFAULTS.newPerDay`) | Aprobada | 2026-10-27 |
 | D-022 | FSRS con fuzz activado: es determinista para unas mismas entradas (verificado en tests) | Aprobada | 2026-10-27 |
 | D-023 | El tema claro/oscuro es preferencia del dispositivo (localStorage), no un evento sincronizado | Aprobada | 2026-10-27 |
+| D-024 | Permiso de INSERT por columna en `events`: `seq` y `received_at` solo los asigna el servidor | Aprobada | 2026-10-27 |
+| D-025 | Cada dispositivo se vincula a una sola cuenta; con otra cuenta, la sincronización se detiene | Aprobada | 2026-10-27 |
+| D-026 | El motor de sincronización depende de una interfaz `Remote`; Supabase es una implementación | Aprobada | 2026-10-27 |
+| D-027 | Las pruebas de RLS solo corren en CI (no hay Docker en el equipo de desarrollo) | Aprobada | 2026-10-27 |
 
 ## Notas
 
@@ -47,4 +51,8 @@ Cada decisión indica su estado. Para cambiar una decisión, añade una entrada 
 - **D-022**: el estado de las tarjetas se reconstruye reproduciendo repasos en cada
   dispositivo; si el fuzz fuera aleatorio, dos dispositivos calcularían fechas distintas.
 - **D-023**: es razonable querer modo oscuro en el móvil y claro en el escritorio.
+- **D-025**: mezclar en silencio el historial de dos cuentas sería irreversible (los eventos
+  no se borran). Detenerse y avisar es seguro; desvincular el dispositivo queda pendiente.
+- **D-026**: permite probar subida, bajada, fallos y convergencia sin red ni Docker, con un
+  servidor simulado que imita duplicados, `seq` y aislamiento por usuario.
 - **D-008**: el OTP funciona entre dispositivos y no deja tokens en el fragmento `#` de la URL, que chocaría con `HashRouter`.
