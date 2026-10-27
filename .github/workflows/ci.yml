@@ -72,8 +72,17 @@ jobs:
       - name: Arrancar Postgres con las migraciones
         run: supabase db start
 
+      # Falla también si no se ejecuta ningún test (p. ej. si cambia la ruta de los archivos),
+      # y publica el resumen como anotación, visible sin abrir los logs.
       - name: Tests de seguridad (pgTAP)
-        run: supabase test db
+        run: |
+          supabase test db | tee pgtap.log
+          summary=$(grep -oE 'Files=[0-9]+, Tests=[0-9]+' pgtap.log || true)
+          if [ -z "$summary" ] || echo "$summary" | grep -qE 'Files=0|Tests=0'; then
+            echo "::error title=pgTAP::No se ejecutó ningún test de base de datos"
+            exit 1
+          fi
+          echo "::notice title=pgTAP::$summary"
 
   deploy:
     name: Desplegar en GitHub Pages
