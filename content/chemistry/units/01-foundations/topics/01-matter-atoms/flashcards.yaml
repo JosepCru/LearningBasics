@@ -1,0 +1,39 @@
+- id: chem.matter-atoms.fc01
+  objective: chem.matter-atoms.o1
+  front: '¿Qué diferencia un **elemento** de un **compuesto**?'
+  back: 'Un elemento no puede descomponerse en sustancias más simples por métodos químicos. Un compuesto contiene dos o más elementos combinados en proporción fija.'
+
+- id: chem.matter-atoms.fc02
+  objective: chem.matter-atoms.o1
+  front: '¿Qué es una **mezcla homogénea**? Pon un ejemplo.'
+  back: 'Una mezcla de composición uniforme en toda la muestra (una disolución). Ejemplos: el aire o el agua salada.'
+
+- id: chem.matter-atoms.fc03
+  objective: chem.matter-atoms.o2
+  front: '¿Qué indica el **número atómico** $Z$?'
+  back: 'El número de protones del núcleo. Determina de qué elemento se trata.'
+
+- id: chem.matter-atoms.fc04
+  objective: chem.matter-atoms.o2
+  front: '¿Qué indica el **número másico** $A$?'
+  back: 'Protones + neutrones. Neutrones $= A - Z$.'
+
+- id: chem.matter-atoms.fc05
+  objective: chem.matter-atoms.o2
+  front: '¿Qué son los **isótopos**?'
+  back: 'Átomos del mismo elemento (mismo $Z$) con distinto número de neutrones (distinto $A$).'
+
+- id: chem.matter-atoms.fc06
+  objective: chem.matter-atoms.o3
+  front: '¿Qué es un **catión**?'
+  back: 'Un ion positivo: ha perdido electrones. Ejemplo: $\ce{Na+}$.'
+
+- id: chem.matter-atoms.fc07
+  objective: chem.matter-atoms.o3
+  front: '¿Qué es un **anión**?'
+  back: 'Un ion negativo: ha ganado electrones. Ejemplo: $\ce{Cl-}$.'
+
+- id: chem.matter-atoms.fc08
+  objective: chem.matter-atoms.o4
+  front: '¿Cómo se calcula la **masa atómica media** de un elemento?'
+  back: '$\bar{m} = \sum_i (\text{fracción}_i \times m_i)$: la suma de la masa de cada isótopo multiplicada por su abundancia relativa.'

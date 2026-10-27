@@ -1,0 +1,13 @@
+id: chem.units
+title: Unidades, notación científica y razonamiento cuantitativo
+description: Las herramientas numéricas que usarás en toda la química.
+estimatedMinutes: 40
+objectives:
+  - id: chem.units.o1
+    text: Identificar las unidades base del SI y usar sus prefijos.
+  - id: chem.units.o2
+    text: Expresar y operar cantidades en notación científica.
+  - id: chem.units.o3
+    text: Contar cifras significativas y aplicarlas al redondear resultados.
+  - id: chem.units.o4
+    text: Convertir unidades mediante análisis dimensional (factores de conversión).

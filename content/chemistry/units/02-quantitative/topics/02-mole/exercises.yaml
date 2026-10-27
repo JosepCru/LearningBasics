@@ -1,0 +1,157 @@
+- id: chem.mole.ex01
+  type: multiple-choice
+  objective: chem.mole.o1
+  difficulty: 1
+  revision: 1
+  prompt: '¿Qué es **un mol**?'
+  options:
+    - { id: a, text: 'La cantidad de sustancia que contiene $6.022 \times 10^{23}$ entidades', correct: true }
+    - { id: b, text: 'La masa de 1 g de cualquier sustancia', misconception: mole-as-mass }
+    - { id: c, text: 'El volumen que ocupa 1 L de cualquier sustancia', misconception: mole-as-volume }
+    - { id: d, text: 'El número de átomos que hay en una molécula', misconception: mole-as-molecule }
+  hints:
+    - 'El mol funciona como una "docena" muy grande: es una forma de contar.'
+  explanation: 'El mol es una unidad de **cantidad**: cuenta entidades. Un mol siempre contiene $N_A = 6.022 \times 10^{23}$ entidades, sea cual sea la sustancia; su masa sí depende de la sustancia.'
+
+- id: chem.mole.ex02
+  type: numeric
+  objective: chem.mole.o1
+  difficulty: 1
+  revision: 1
+  prompt: '¿Cuántas **moléculas** hay en $0.250\ \text{mol}$ de $\ce{CO2}$?'
+  answer:
+    value: 1.51e23
+    tolerance: { relative: 0.005 }
+  verify: "0.250 * NA"
+  hints:
+    - '$N = n \times N_A$'
+  solution: '$N = 0.250\ \text{mol} \times 6.022 \times 10^{23}\ \text{mol}^{-1} = 1.51 \times 10^{23}$'
+  explanation: 'Multiplicar los moles por $N_A$ da el número de entidades. Puedes escribirlo como `1.51e23`.'
+
+- id: chem.mole.ex03
+  type: numeric
+  objective: chem.mole.o1
+  difficulty: 2
+  revision: 1
+  prompt: '¿Cuántos **moles** de hierro son $3.01 \times 10^{23}$ átomos de $\ce{Fe}$?'
+  answer:
+    value: 0.500
+    unit: mol
+    tolerance: { relative: 0.005 }
+  verify: "3.01e23 / NA"
+  hints:
+    - '$n = N / N_A$'
+  solution: '$n = \dfrac{3.01 \times 10^{23}}{6.022 \times 10^{23}\ \text{mol}^{-1}} = 0.500\ \text{mol}$'
+  explanation: 'Es la mitad de $N_A$, así que es medio mol.'
+
+- id: chem.mole.ex04
+  type: numeric
+  objective: chem.mole.o2
+  difficulty: 1
+  revision: 1
+  prompt: 'Calcula la **masa molar** del $\ce{CO2}$. (C: 12.01; O: 16.00)'
+  answer:
+    value: 44.01
+    unit: g/mol
+    tolerance: { relative: 0.005 }
+  verify: "molarMass('CO2')"
+  hints:
+    - 'Hay 1 átomo de C y 2 de O.'
+  solution: '$M = 12.01 + 2(16.00) = 44.01\ \text{g/mol}$'
+  explanation: 'Se suma la masa molar de cada átomo multiplicada por su subíndice.'
+
+- id: chem.mole.ex05
+  type: numeric
+  objective: chem.mole.o2
+  difficulty: 2
+  revision: 1
+  prompt: 'Calcula la **masa molar** del $\ce{Ca(OH)2}$. (Ca: 40.08; O: 16.00; H: 1.008)'
+  answer:
+    value: 74.09
+    unit: g/mol
+    tolerance: { relative: 0.005 }
+  verify: "molarMass('Ca(OH)2')"
+  hints:
+    - 'El subíndice 2 multiplica a todo el grupo $\ce{OH}$.'
+    - 'Hay 1 Ca, 2 O y 2 H.'
+  solution: '$M = 40.08 + 2(16.00) + 2(1.008) = 74.10\ \text{g/mol}$'
+  explanation: 'Con paréntesis, cada átomo de dentro se multiplica por el subíndice exterior. Se aceptan 74.09 y 74.10 (depende del redondeo de las masas atómicas).'
+
+- id: chem.mole.ex06
+  type: numeric
+  objective: chem.mole.o3
+  difficulty: 2
+  revision: 1
+  prompt: '¿Cuántos **moles** hay en $10.0\ \text{g}$ de $\ce{NaCl}$? (Na: 22.99; Cl: 35.45)'
+  answer:
+    value: 0.171
+    unit: mol
+    tolerance: { relative: 0.005 }
+  verify: "10.0 / molarMass('NaCl')"
+  hints:
+    - 'Primero calcula la masa molar del NaCl.'
+    - '$n = m / M$'
+  solution: '$M = 58.44\ \text{g/mol}$; $n = 10.0 / 58.44 = 0.171\ \text{mol}$'
+  explanation: 'Dividir la masa entre la masa molar da la cantidad en moles.'
+
+- id: chem.mole.ex07
+  type: numeric
+  objective: chem.mole.o3
+  difficulty: 2
+  revision: 1
+  prompt: '¿Qué **masa** tienen $0.500\ \text{mol}$ de $\ce{H2O}$? (H: 1.008; O: 16.00)'
+  answer:
+    value: 9.01
+    unit: g
+    tolerance: { relative: 0.005 }
+  verify: "0.500 * molarMass('H2O')"
+  hints:
+    - '$m = n \times M$'
+  solution: '$M = 18.02\ \text{g/mol}$; $m = 0.500 \times 18.02 = 9.01\ \text{g}$'
+  explanation: 'Para pasar de moles a masa se multiplica por la masa molar.'
+
+- id: chem.mole.ex08
+  type: numeric
+  objective: chem.mole.o3
+  difficulty: 3
+  revision: 1
+  prompt: '¿Cuántas **moléculas** de agua hay en $1.00\ \text{g}$ de $\ce{H2O}$?'
+  answer:
+    value: 3.34e22
+    tolerance: { relative: 0.005 }
+  verify: "1.00 / molarMass('H2O') * NA"
+  hints:
+    - 'No hay atajo: primero pasa de gramos a moles.'
+    - 'Después multiplica los moles por $N_A$.'
+  solution: '$n = 1.00 / 18.02 = 0.0555\ \text{mol}$; $N = 0.0555 \times 6.022 \times 10^{23} = 3.34 \times 10^{22}$'
+  explanation: 'Gramos → moles (con $M$) → moléculas (con $N_A$). El mol es siempre el paso intermedio.'
+
+- id: chem.mole.ex09
+  type: numeric
+  objective: chem.mole.o3
+  difficulty: 3
+  revision: 1
+  prompt: '¿Cuántos **átomos de hidrógeno** hay en $0.100\ \text{mol}$ de $\ce{H2O}$?'
+  answer:
+    value: 1.20e23
+    tolerance: { relative: 0.005 }
+  verify: "0.100 * 2 * NA"
+  hints:
+    - '¿Cuántos átomos de H hay en cada molécula de agua?'
+    - 'Calcula primero los moles de átomos de H.'
+  solution: '$0.100\ \text{mol H}_2\text{O} \times 2 = 0.200\ \text{mol H}$; $N = 0.200 \times 6.022 \times 10^{23} = 1.20 \times 10^{23}$'
+  explanation: 'Cada molécula de agua tiene 2 átomos de H, así que hay el doble de moles de H que de moléculas.'
+
+- id: chem.mole.ex10
+  type: multiple-choice
+  objective: chem.mole.o1
+  difficulty: 2
+  revision: 1
+  prompt: '¿Qué contiene **más átomos**: 1 mol de $\ce{He}$ o 1 mol de $\ce{H2}$?'
+  options:
+    - { id: a, text: '1 mol de $\ce{H2}$', correct: true }
+    - { id: b, text: '1 mol de $\ce{He}$', misconception: mass-vs-amount }
+    - { id: c, text: 'Los dos tienen el mismo número de átomos', misconception: molecules-vs-atoms }
+  hints:
+    - 'Ambos contienen el mismo número de **partículas**. ¿Cuántos átomos tiene cada partícula?'
+  explanation: 'Los dos tienen $N_A$ partículas, pero cada molécula de $\ce{H2}$ tiene 2 átomos: 1 mol de $\ce{H2}$ contiene $2N_A$ átomos y 1 mol de $\ce{He}$, solo $N_A$.'

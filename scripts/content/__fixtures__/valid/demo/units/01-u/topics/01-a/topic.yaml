@@ -1,0 +1,5 @@
+id: demo.a
+title: Tema A
+objectives:
+  - id: demo.a.o1
+    text: Calcular una masa molar.

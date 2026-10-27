@@ -1,0 +1,244 @@
+.crumbs {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.progress progress {
+  flex: 1;
+  height: 6px;
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  background: var(--surface-sunken);
+  overflow: hidden;
+}
+.progress progress::-webkit-progress-bar {
+  background: var(--surface-sunken);
+}
+.progress progress::-webkit-progress-value {
+  background: var(--accent);
+}
+.progress progress::-moz-progress-bar {
+  background: var(--accent);
+}
+
+.card {
+  max-width: 720px;
+  padding: clamp(1rem, 3vw, 1.75rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.prompt {
+  margin-bottom: 1.25rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.option:hover {
+  border-color: var(--muted);
+}
+.option:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.option input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--accent);
+  flex: none;
+}
+.options:disabled .option {
+  cursor: default;
+}
+.optionText {
+  font-family: var(--font-read);
+  font-size: 1.05rem;
+}
+.optionCorrect,
+.optionCorrect:has(input:checked) {
+  border-color: var(--correct);
+  background: var(--correct-soft);
+}
+.optionWrong,
+.optionWrong:has(input:checked) {
+  border-color: var(--incorrect);
+  background: var(--incorrect-soft);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.fieldLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.input {
+  width: 100%;
+  max-width: 22rem;
+  min-height: 48px;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+}
+.input:focus-visible {
+  border-color: var(--focus);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feedback:empty {
+  display: none;
+}
+.feedback {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  border-left: 4px solid var(--line);
+  background: var(--surface-sunken);
+}
+.feedbackTitle {
+  margin: 0;
+  font-weight: 600;
+}
+.feedback :global(.prose) {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+.good {
+  border-left-color: var(--correct);
+  background: var(--correct-soft);
+}
+.good .feedbackTitle::before {
+  content: '✓ ';
+  color: var(--correct);
+}
+.bad {
+  border-left-color: var(--incorrect);
+  background: var(--incorrect-soft);
+}
+.bad .feedbackTitle::before {
+  content: '✗ ';
+  color: var(--incorrect);
+}
+.info {
+  border-left-color: var(--muted);
+}
+
+.selfGrade {
+  margin-top: 0.75rem;
+}
+
+.hints {
+  margin: 1rem 0 0;
+  padding: 0.75rem 1rem 0.75rem 2.2rem;
+  border-radius: var(--radius);
+  background: var(--accent-soft);
+}
+.hints li + li {
+  margin-top: 0.5rem;
+}
+.hints :global(.prose) {
+  font-size: 1rem;
+}
+
+.reveal {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.reveal section {
+  width: 100%;
+}
+.revealTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 0.4rem;
+}
+
+.summary {
+  max-width: 560px;
+}
+.summaryTitle {
+  font-size: 1.6rem;
+  margin: 0 0 1.25rem;
+}
+.summaryStats {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
+}
+.summaryStats div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.summaryStats dt {
+  color: var(--muted);
+}
+.summaryStats dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.summaryNote {
+  color: var(--muted);
+  font-size: 0.9rem;
+}

@@ -18,10 +18,22 @@ Cada decisión indica su estado. Para cambiar una decisión, añade una entrada 
 | D-012 | Unidades: registro propio basado en vectores de dimensión (sin mathjs) | Aprobada | 2026-10-27 |
 | D-013 | El propietario implementa algunas piezas de lógica de 5–10 líneas (dominio, planificador) con tests preparados | Aprobada (por defecto) | 2026-10-27 |
 | D-014 | Tests e2e (Playwright): se decide al inicio de la Fase 5 | Pendiente | 2026-10-27 |
+| D-015 | TypeScript fijado en 6.0.x (no 7.x) | Aprobada | 2026-10-27 |
+| D-016 | Una sola copia de KaTeX en todo el proyecto (`overrides` en package.json) | Aprobada | 2026-10-27 |
+| D-017 | Sin fuentes web: tipografías del sistema (serif para leer, sans para la interfaz, mono para datos) | Aprobada | 2026-10-27 |
+| D-018 | Las directivas Markdown en línea (`:texto`) se tratan como texto normal; solo existen bloques `:::` | Aprobada | 2026-10-27 |
 
 ## Notas
 
 - **D-002**: GitHub Pages no admite reglas de reescritura. `BrowserRouter` requiere el truco de `404.html`, que devuelve estado HTTP 404 en enlaces directos y complica la PWA. Con hash, recargar y abrir enlaces directos funciona sin configuración.
 - **D-003**: YAML permite comentarios y texto multilínea (LaTeX legible). No añade dependencias porque el frontmatter ya lo necesita. Se valida en modo estricto para evitar coerciones implícitas.
 - **D-006**: la unión de dos logs con IDs únicos siempre es correcta (G-Set). Sincronizar, importar y recuperar fallos se reduce a «unir por `id`».
+- **D-015**: `typescript-eslint` aún no admite TypeScript ≥ 6.1. Revisar al actualizar dependencias.
+- **D-016**: `rehype-katex` traía su propia KaTeX 0.16. mhchem (`\ce{}`) se registra sobre
+  una instancia concreta y el CSS debe coincidir con la versión que genera el HTML; con dos
+  copias, `\ce` fallaba y las versiones no cuadraban. El override también eliminó 4 avisos de
+  `npm audit`.
+- **D-017**: cero dependencias y nada que descargar para funcionar offline (Fase 5). Las
+  lecciones usan cifras alineadas (`lining-nums`) porque Georgia usa cifras elzevirianas.
+- **D-018**: con directivas en línea, «10:30» o «1:2» se interpretaban como directivas.
 - **D-008**: el OTP funciona entre dispositivos y no deja tokens en el fragmento `#` de la URL, que chocaría con `HashRouter`.

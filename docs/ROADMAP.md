@@ -7,7 +7,7 @@ No se empieza una fase hasta que la anterior está probada y explicada.
 | Fase | Estado |
 |---|---|
 | 0 — Arquitectura y especificación | ✅ Completada |
-| 1 — Shell, sistema de contenido, lecciones y ejercicios de química | Pendiente |
+| 1 — Shell, sistema de contenido, lecciones y ejercicios de química | ✅ Completada |
 | 2 — Persistencia local, historial, flashcards y progreso | Pendiente |
 | 3 — Autenticación Supabase y sincronización | Pendiente |
 | 4 — Dashboard diario, plan de estudio y temporizador | Pendiente |
@@ -36,12 +36,21 @@ ROADMAP), `content/CONTENT_GUIDE.md`, README inicial, `.gitignore`.
 - GitHub Actions: typecheck, lint, validate-content, tests, build, deploy a Pages.
 
 **Aceptación**
-- [ ] Recargar una URL profunda en Pages muestra la vista correcta.
-- [ ] Un contenido inválido de ejemplo (fixture) hace fallar `validate-content` con mensaje claro.
-- [ ] Tests de tolerancia relativa/absoluta, conversión de unidades, coma decimal y unidad ausente.
-- [ ] Todos los `verify` del contenido pasan.
-- [ ] KaTeX y mhchem se ven bien en móvil y escritorio, claro y oscuro.
-- [ ] El deploy solo ocurre si todos los checks pasan.
+- [x] Recargar una URL profunda muestra la vista correcta (comprobado en local; en Pages, tras el primer despliegue).
+- [x] Contenido inválido (fixtures) hace fallar la validación con mensaje claro.
+- [x] Tests de tolerancia relativa/absoluta, conversión de unidades, coma decimal y unidad ausente.
+- [x] Todos los `verify` del contenido pasan (28/28).
+- [x] KaTeX y mhchem se ven bien en móvil (375 px) y escritorio, claro y oscuro.
+- [x] El workflow solo despliega si todos los checks pasan (pendiente de la primera ejecución en GitHub).
+
+**Limitaciones conocidas**
+- El progreso no se guarda: recargar reinicia la práctica (Fase 2).
+- Las flashcards están en el contenido pero aún no se muestran (Fase 2).
+- Las 9 lecciones son borradores de IA sin revisar contra la fuente.
+- Al cambiar `content/` con `npm run dev` en marcha, hay que reiniciarlo.
+- Texto corto: solo coincidencia normalizada (sin sinónimos ni erratas).
+- Sin cifras significativas en la corrección: se evalúa por tolerancia.
+- Sin PWA ni modo offline todavía (Fase 5).
 
 ## Fase 2 — Persistencia, historial, flashcards y progreso
 

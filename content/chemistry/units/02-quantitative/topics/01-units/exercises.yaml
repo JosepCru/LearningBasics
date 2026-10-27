@@ -1,0 +1,147 @@
+- id: chem.units.ex01
+  type: multiple-choice
+  objective: chem.units.o1
+  difficulty: 1
+  revision: 1
+  prompt: '¿Cuál es la **unidad base** de masa en el SI?'
+  options:
+    - { id: a, text: 'kilogramo (kg)', correct: true }
+    - { id: b, text: 'gramo (g)', misconception: gram-as-base-unit }
+    - { id: c, text: 'mol', misconception: mass-vs-amount }
+    - { id: d, text: 'newton (N)', misconception: mass-vs-weight }
+  hints:
+    - 'Es la única unidad base que ya lleva un prefijo en su nombre.'
+  explanation: 'La unidad base de masa es el **kilogramo**. El gramo es una fracción de ella ($10^{-3}\ \text{kg}$). El mol mide cantidad de sustancia y el newton, fuerza.'
+
+- id: chem.units.ex02
+  type: numeric
+  objective: chem.units.o4
+  difficulty: 1
+  revision: 1
+  prompt: 'Expresa $2.5\ \text{km}$ en **metros**. Escribe el número y la unidad.'
+  answer:
+    value: 2500
+    unit: m
+    tolerance: { relative: 0.001 }
+    acceptEquivalentUnits: false
+  verify: "convert(2.5, 'km', 'm')"
+  hints:
+    - '$1\ \text{km} = 1000\ \text{m}$.'
+  solution: '$2.5\ \text{km} \times \dfrac{1000\ \text{m}}{1\ \text{km}} = 2500\ \text{m}$'
+  explanation: 'El prefijo kilo significa $10^3$, así que hay que multiplicar por 1000.'
+
+- id: chem.units.ex03
+  type: numeric
+  objective: chem.units.o4
+  difficulty: 1
+  revision: 1
+  prompt: 'Expresa $350\ \text{mL}$ en **litros**.'
+  answer:
+    value: 0.350
+    unit: L
+    tolerance: { relative: 0.001 }
+    acceptEquivalentUnits: false
+  verify: "convert(350, 'mL', 'L')"
+  hints:
+    - '$1\ \text{L} = 1000\ \text{mL}$. ¿El resultado debe ser mayor o menor que 350?'
+  solution: '$350\ \text{mL} \times \dfrac{1\ \text{L}}{1000\ \text{mL}} = 0.350\ \text{L}$'
+  explanation: 'Al pasar a una unidad mayor, el número se hace más pequeño.'
+
+- id: chem.units.ex04
+  type: numeric
+  objective: chem.units.o2
+  difficulty: 2
+  revision: 1
+  prompt: 'Calcula $(3.0 \times 10^{4}) \times (2.0 \times 10^{-2})$.'
+  answer:
+    value: 600
+    tolerance: { relative: 0.001 }
+  verify: "3.0e4 * 2.0e-2"
+  hints:
+    - 'Multiplica las mantisas: $3.0 \times 2.0$.'
+    - 'Suma los exponentes: $4 + (-2)$.'
+  solution: '$(3.0 \times 2.0) \times 10^{4 + (-2)} = 6.0 \times 10^{2}$'
+  explanation: 'Al multiplicar potencias de la misma base, los exponentes se suman.'
+
+- id: chem.units.ex05
+  type: multiple-choice
+  objective: chem.units.o3
+  difficulty: 2
+  revision: 1
+  prompt: '¿Cuántas cifras significativas tiene $0.00450$?'
+  options:
+    - { id: a, text: '3', correct: true }
+    - { id: b, text: '6', misconception: leading-zeros-significant }
+    - { id: c, text: '2', misconception: trailing-zero-not-significant }
+    - { id: d, text: '5', misconception: leading-zeros-significant }
+  hints:
+    - 'Los ceros a la izquierda solo sitúan la coma.'
+    - 'Un cero final después de la coma decimal sí indica precisión.'
+  explanation: 'Los ceros iniciales no cuentan; 4, 5 y el 0 final sí: **3 cifras**. En notación científica se ve claro: $4.50 \times 10^{-3}$.'
+
+- id: chem.units.ex06
+  type: numeric
+  objective: chem.units.o4
+  difficulty: 2
+  revision: 1
+  prompt: 'Un líquido tiene una densidad de $1.20\ \text{g/mL}$. ¿Qué **masa** tienen $25.0\ \text{mL}$?'
+  answer:
+    value: 30.0
+    unit: g
+    tolerance: { relative: 0.005 }
+  verify: "1.20 * 25.0"
+  hints:
+    - 'Usa la densidad como factor de conversión: $\dfrac{1.20\ \text{g}}{1\ \text{mL}}$.'
+  solution: '$25.0\ \text{mL} \times \dfrac{1.20\ \text{g}}{1\ \text{mL}} = 30.0\ \text{g}$'
+  explanation: 'Los mL se cancelan y queda la masa en gramos. Ambos datos tienen 3 cifras significativas, así que el resultado también.'
+
+- id: chem.units.ex07
+  type: numeric
+  objective: chem.units.o4
+  difficulty: 2
+  revision: 1
+  prompt: '¿Cuántos **segundos** hay en $1.5\ \text{h}$?'
+  answer:
+    value: 5400
+    unit: s
+    tolerance: { relative: 0.001 }
+  verify: "convert(1.5, 'h', 's')"
+  hints:
+    - 'Encadena dos factores: horas → minutos → segundos.'
+  solution: '$1.5\ \text{h} \times \dfrac{60\ \text{min}}{1\ \text{h}} \times \dfrac{60\ \text{s}}{1\ \text{min}} = 5400\ \text{s}$'
+  explanation: 'Cada factor vale 1; las unidades intermedias se cancelan.'
+
+- id: chem.units.ex08
+  type: numeric
+  objective: chem.units.o1
+  difficulty: 1
+  revision: 1
+  prompt: 'Expresa $25\ ^{\circ}\text{C}$ en **kelvin**.'
+  answer:
+    value: 298
+    unit: K
+    tolerance: { absolute: 0.5 }
+    acceptEquivalentUnits: false # si no, "25 °C" contaría como respuesta correcta
+  verify: "convert(25, '°C', 'K')"
+  hints:
+    - '$T(\text{K}) = T({}^{\circ}\text{C}) + 273.15$'
+  solution: '$25 + 273.15 = 298.15 \approx 298\ \text{K}$'
+  explanation: 'La escala kelvin está desplazada 273.15 respecto a la Celsius. Se acepta 298 o 298.15.'
+
+- id: chem.units.ex09
+  type: numeric
+  objective: chem.units.o4
+  difficulty: 3
+  revision: 1
+  prompt: 'Expresa la densidad del agua, $1.00\ \text{g/mL}$, en $\text{kg/m}^3$.'
+  answer:
+    value: 1000
+    unit: kg/m3
+    tolerance: { relative: 0.005 }
+    acceptEquivalentUnits: false
+  verify: "convert(1.00, 'g/mL', 'kg/m3')"
+  hints:
+    - 'Convierte por separado el numerador (g → kg) y el denominador (mL → m³).'
+    - '$1\ \text{m}^3 = 10^{6}\ \text{mL}$.'
+  solution: '$1.00\ \dfrac{\text{g}}{\text{mL}} \times \dfrac{1\ \text{kg}}{1000\ \text{g}} \times \dfrac{10^{6}\ \text{mL}}{1\ \text{m}^3} = 1.00 \times 10^{3}\ \text{kg/m}^3$'
+  explanation: 'Con unidades compuestas se convierte cada parte con su propio factor.'

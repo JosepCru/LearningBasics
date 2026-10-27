@@ -1,0 +1,12 @@
+id: chem.mole
+title: El mol, la masa molar y la constante de Avogadro
+description: Contar partículas pesando, el puente entre el mundo atómico y el laboratorio.
+prerequisites: [chem.matter-atoms, chem.units]
+estimatedMinutes: 45
+objectives:
+  - id: chem.mole.o1
+    text: Relacionar la cantidad de sustancia (mol) con el número de entidades mediante la constante de Avogadro.
+  - id: chem.mole.o2
+    text: Calcular la masa molar de un compuesto a partir de su fórmula.
+  - id: chem.mole.o3
+    text: Convertir entre masa, cantidad de sustancia y número de entidades.

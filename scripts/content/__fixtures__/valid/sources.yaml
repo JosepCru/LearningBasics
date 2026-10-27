@@ -1,0 +1,6 @@
+- id: book
+  title: Libro de prueba
+  authors: [Autora Ejemplo]
+  publisher: Editorial
+  year: 2020
+  url: https://example.org/book

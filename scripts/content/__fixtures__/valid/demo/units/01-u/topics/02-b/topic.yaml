@@ -1,0 +1,6 @@
+id: demo.b
+title: Tema B
+prerequisites: [demo.a]
+objectives:
+  - id: demo.b.o1
+    text: Algo más.

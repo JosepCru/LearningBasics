@@ -4,8 +4,12 @@ Todo el contenido educativo vive en `content/` y se versiona en Git. Añadir asi
 unidades, temas, lecciones, ejercicios o flashcards **no requiere tocar código** salvo que
 necesites un tipo de interacción nuevo.
 
-> Estado: especificación (Fase 0). Los esquemas se implementan en `src/core/content` en la
-> Fase 1; si algo difiere, el código Zod manda y esta guía se actualiza.
+> Los esquemas están en `src/core/content/schemas.ts`. Si esta guía y el código difieren,
+> manda el código; avisa para actualizar la guía.
+
+**Consejo de YAML**: escribe el texto con LaTeX entre **comillas simples** (`'...'`). Dentro
+de ellas la barra `\` es literal (`'$\ce{H2O}$'`); con comillas dobles tendrías que escribir
+`\\ce`. Para una comilla simple dentro del texto, duplícala: `'l''agua'`.
 
 ## Índice
 
@@ -133,16 +137,22 @@ Cuerpo:
 - Matemáticas: `$...$` en línea, `$$...$$` en bloque.
 - Química: `$\ce{H2SO4}$`, `$\ce{Na+}$`, `$\ce{2H2 + O2 -> 2H2O}$` (mhchem).
 - Imágenes: `![texto alternativo obligatorio](../assets/isotopes.svg)`.
-- Bloques especiales:
+- Bloques especiales: `worked-example` (ejemplo resuelto), `note` (nota) y `pitfall`
+  (error frecuente). El título va entre corchetes y es opcional; sin él se usa el título
+  por defecto del bloque. Un bloque desconocido es un error de validación.
 
 ```markdown
-:::worked-example Masa molar del agua
+:::worked-example[Masa molar del agua]
 1. Identifica los átomos: 2 H y 1 O.
 2. $M = 2(1.008) + 16.00 = 18.02\ \text{g/mol}$
 :::
 
 :::note
 La masa molar tiene el mismo valor numérico que la masa fórmula en u.
+:::
+
+:::pitfall
+En $\ce{Ca(OH)2}$ hay 2 hidrógenos, no 1.
 :::
 ```
 
@@ -228,6 +238,9 @@ Campos comunes:
 | **accept** | lista de string | Respuestas aceptadas |
 | normalize | `{case, accents, whitespace}` | Por defecto los tres `true` |
 | allowSelfGrade | bool | Si no coincide, mostrar la respuesta modelo y permitir "Era correcta" |
+
+Para **símbolos y fórmulas** usa `normalize: { case: false }`: en química las mayúsculas
+importan (`Co` es cobalto; `CO`, monóxido de carbono).
 
 **Limitaciones explícitas**: compara texto normalizado, no entiende sinónimos, paráfrasis
 ni errores tipográficos. Úsalo para respuestas de una o pocas palabras con formas
@@ -333,7 +346,9 @@ generada por IA).
 - `molarMass('fórmula')`: masa molar calculada con un parser de fórmulas y la tabla de
   pesos atómicos estándar (IUPAC) de `scripts/chem/`, en g/mol. Acepta paréntesis e
   hidratos sencillos: `Ca(OH)2`, `CuSO4·5H2O`.
-- `atomicMass('Símbolo')`.
+- `atomicMass('Símbolo')`: peso atómico estándar en g/mol.
+- `atomicNumber('Símbolo')`: número atómico $Z$ (para problemas de protones, neutrones y
+  electrones: `"37 - atomicNumber('Cl')"`).
 - Constantes: `NA` (6.02214076e23 mol⁻¹, exacta).
 - `convert(valor, 'unidadOrigen', 'unidadDestino')`.
 
@@ -363,10 +378,12 @@ Reglas:
   (capítulo y sección). **Comprueba la sección en la fuente** antes de citarla; no la
   copies de memoria ni de una respuesta de IA.
 - No inventes citas. Si no encuentras la fuente de una afirmación, reescríbela o elimínala.
-- Fuentes preferentes: OpenStax (CC BY 4.0), IUPAC (pesos atómicos, nomenclatura),
-  NIST/CODATA (constantes), BIPM (SI).
-- Respeta licencias: con CC BY puedes adaptar citando; no copies párrafos largos de fuentes
-  sin licencia abierta.
+- Fuentes preferentes: OpenStax, IUPAC (pesos atómicos, nomenclatura), NIST/CODATA
+  (constantes), BIPM (SI).
+- Respeta licencias. **OpenStax Chemistry 2e** figura como **CC BY-NC-SA 4.0** en la
+  página del libro (comprobado el 2026-10-27): permite uso no comercial citando y con la
+  misma licencia para obras derivadas. Por eso las lecciones se redactan con palabras
+  propias y se citan; no se copian párrafos del libro.
 
 Campo `provenance`:
 
@@ -383,12 +400,15 @@ Ningún contenido generado por IA se marca como `verified` automáticamente.
 Tu progreso se guarda por ID. Por eso:
 
 - **Nunca reutilices** un ID para otro contenido.
-- **No borres** un elemento con ID publicado: márcalo como retirado:
+- **No borres** un elemento con ID publicado: añádele `retired: true` (y un motivo),
+  dejando el resto de sus campos como estaban:
 
   ```yaml
   - id: chem.mole.ex07
     retired: true
     retiredReason: "Enunciado ambiguo; sustituido por ex11"
+    type: numeric
+    # ...resto de campos sin cambios
   ```
 
   Los elementos retirados no se muestran, pero el historial sigue siendo válido.

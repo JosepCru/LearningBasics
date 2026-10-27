@@ -1,0 +1,21 @@
+.status {
+  padding: 1.5rem;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  color: var(--muted);
+}
+.title {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.title:last-child {
+  margin-bottom: 0;
+}
+.error {
+  border: 1px solid var(--incorrect);
+  background: var(--incorrect-soft);
+}
+.loading .title::after {
+  content: '…';
+}

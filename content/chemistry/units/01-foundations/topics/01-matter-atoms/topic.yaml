@@ -1,0 +1,13 @@
+id: chem.matter-atoms
+title: Materia, átomos, moléculas e iones
+description: Clasificar la materia y describir los átomos por sus partículas subatómicas.
+estimatedMinutes: 40
+objectives:
+  - id: chem.matter-atoms.o1
+    text: Clasificar la materia en elementos, compuestos, mezclas homogéneas y mezclas heterogéneas.
+  - id: chem.matter-atoms.o2
+    text: Obtener el número de protones, neutrones y electrones a partir del símbolo de un átomo o ion.
+  - id: chem.matter-atoms.o3
+    text: Distinguir átomos, moléculas, cationes y aniones.
+  - id: chem.matter-atoms.o4
+    text: Calcular la masa atómica media de un elemento a partir de sus isótopos y abundancias.

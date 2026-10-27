@@ -1,0 +1,29 @@
+- id: chem.units.fc01
+  objective: chem.units.o1
+  front: '¿Qué factor representan los prefijos **mili** (m) y **micro** (µ)?'
+  back: 'mili = $10^{-3}$; micro = $10^{-6}$.'
+
+- id: chem.units.fc02
+  objective: chem.units.o1
+  front: '¿Cuántos mL hay en 1 L? ¿Y cuántos cm³ en 1 mL?'
+  back: '$1\ \text{L} = 1000\ \text{mL}$, y $1\ \text{mL} = 1\ \text{cm}^3$.'
+
+- id: chem.units.fc03
+  objective: chem.units.o1
+  front: '¿Cómo se pasa de grados Celsius a kelvin?'
+  back: '$T(\text{K}) = T({}^{\circ}\text{C}) + 273.15$'
+
+- id: chem.units.fc04
+  objective: chem.units.o2
+  front: 'Al **multiplicar** números en notación científica, ¿qué se hace con los exponentes?'
+  back: 'Se suman. Al dividir, se restan.'
+
+- id: chem.units.fc05
+  objective: chem.units.o3
+  front: '¿Son significativos los ceros **a la izquierda**, como en 0.0045?'
+  back: 'No: solo sitúan la coma. 0.0045 tiene 2 cifras significativas.'
+
+- id: chem.units.fc06
+  objective: chem.units.o4
+  front: '¿Qué es un **factor de conversión**?'
+  back: 'Una fracción que vale 1, construida a partir de una equivalencia (por ejemplo, $\frac{1000\ \text{m}}{1\ \text{km}}$). Se coloca de modo que la unidad que quieres eliminar quede en el denominador.'

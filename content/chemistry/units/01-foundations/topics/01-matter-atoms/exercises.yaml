@@ -1,0 +1,137 @@
+# Ejercicios de chem.matter-atoms. Ver CONTENT_GUIDE.md §3.5.
+# Consejo: usa comillas simples para texto con LaTeX; dentro, \ es literal.
+
+- id: chem.matter-atoms.ex01
+  type: multiple-choice
+  objective: chem.matter-atoms.o1
+  difficulty: 1
+  revision: 1
+  prompt: '¿Cómo se clasifica el **aire** limpio y seco?'
+  options:
+    - { id: a, text: 'Mezcla homogénea', correct: true }
+    - { id: b, text: 'Compuesto', misconception: mixture-vs-compound }
+    - { id: c, text: 'Elemento', misconception: mixture-vs-compound }
+    - { id: d, text: 'Mezcla heterogénea', misconception: homogeneous-vs-heterogeneous }
+  hints:
+    - '¿Tiene el aire una composición fija o puede variar (por ejemplo, la humedad o el $\ce{CO2}$)?'
+    - 'Sus componentes ($\ce{N2}$, $\ce{O2}$, $\ce{Ar}$…) no se distinguen a simple vista.'
+  explanation: 'El aire es una mezcla de varios gases en proporción variable y de aspecto uniforme, así que es una **mezcla homogénea**.'
+
+- id: chem.matter-atoms.ex02
+  type: multiple-choice
+  objective: chem.matter-atoms.o1
+  difficulty: 2
+  revision: 1
+  prompt: '¿Cuál de estas sustancias es un **compuesto**?'
+  options:
+    - { id: a, text: '$\ce{O2}$', misconception: molecule-vs-compound, feedback: '$\ce{O2}$ es una molécula, pero solo contiene oxígeno: es un elemento.' }
+    - { id: b, text: '$\ce{Fe}$', misconception: element-vs-compound }
+    - { id: c, text: '$\ce{CO2}$', correct: true }
+    - { id: d, text: 'Agua de mar', misconception: mixture-vs-compound }
+  hints:
+    - 'Un compuesto contiene al menos dos elementos distintos en proporción fija.'
+  explanation: '$\ce{CO2}$ contiene carbono y oxígeno combinados en proporción fija (1:2). $\ce{O2}$ y $\ce{Fe}$ son elementos, y el agua de mar es una mezcla.'
+
+- id: chem.matter-atoms.ex03
+  type: numeric
+  objective: chem.matter-atoms.o2
+  difficulty: 1
+  revision: 1
+  prompt: '¿Cuántos **neutrones** tiene un átomo de $\ce{^{37}_{17}Cl}$?'
+  answer:
+    value: 20
+    tolerance: { absolute: 0 }
+  verify: "37 - atomicNumber('Cl')"
+  hints:
+    - 'El número de arriba es $A$ (protones + neutrones) y el de abajo es $Z$ (protones).'
+    - 'Neutrones $= A - Z$.'
+  solution: 'Neutrones $= A - Z = 37 - 17 = 20$.'
+  explanation: 'El número másico cuenta protones y neutrones; al restarle los protones quedan los neutrones.'
+
+- id: chem.matter-atoms.ex04
+  type: numeric
+  objective: chem.matter-atoms.o2
+  difficulty: 2
+  revision: 1
+  prompt: '¿Cuántos **electrones** tiene el ion $\ce{Fe^3+}$? (Hierro: $Z = 26$)'
+  answer:
+    value: 23
+    tolerance: { absolute: 0 }
+  verify: "atomicNumber('Fe') - 3"
+  hints:
+    - 'Una carga positiva significa que el átomo ha **perdido** electrones.'
+    - 'Electrones $= Z - \text{carga}$.'
+  solution: 'Electrones $= 26 - 3 = 23$.'
+  explanation: 'El ion conserva sus 26 protones; al perder 3 electrones queda con carga $+3$ y 23 electrones.'
+
+- id: chem.matter-atoms.ex05
+  type: numeric
+  objective: chem.matter-atoms.o4
+  difficulty: 3
+  revision: 1
+  prompt: |
+    El cloro natural está formado por $\ce{^{35}Cl}$ (34.969 u, 75.76 %) y $\ce{^{37}Cl}$ (36.966 u, 24.24 %).
+    Calcula la **masa atómica media** del cloro, con unidades.
+  answer:
+    value: 35.45
+    unit: u
+    tolerance: { relative: 0.001 }
+  verify: "0.7576 * 34.969 + 0.2424 * 36.966"
+  hints:
+    - 'Convierte los porcentajes en fracciones (divide entre 100).'
+    - 'Multiplica cada masa por su fracción y suma los resultados.'
+  solution: '$0.7576 \times 34.969 + 0.2424 \times 36.966 = 26.49 + 8.96 = 35.45\ \text{u}$'
+  explanation: 'La masa media pondera cada isótopo por su abundancia. Como el $\ce{^{35}Cl}$ es el más abundante, el resultado queda más cerca de 35 que de 37.'
+
+- id: chem.matter-atoms.ex06
+  type: multiple-choice
+  objective: chem.matter-atoms.o3
+  difficulty: 1
+  revision: 1
+  prompt: 'Un átomo de sodio **pierde un electrón**. ¿Qué se forma?'
+  options:
+    - { id: a, text: 'Un catión, $\ce{Na+}$', correct: true }
+    - { id: b, text: 'Un anión, $\ce{Na-}$', misconception: charge-sign }
+    - { id: c, text: 'Un isótopo del sodio', misconception: ion-vs-isotope }
+    - { id: d, text: 'Una molécula de sodio', misconception: ion-vs-molecule }
+  hints:
+    - 'El electrón tiene carga negativa. Si se pierde carga negativa, ¿cómo queda la carga neta?'
+  explanation: 'Al perder un electrón, el sodio queda con un protón más que electrones: carga $+1$. Un ion positivo es un **catión**.'
+
+- id: chem.matter-atoms.ex07
+  type: short-text
+  objective: chem.matter-atoms.o3
+  difficulty: 1
+  revision: 1
+  prompt: '¿Cómo se llama un ion con carga **negativa**?'
+  accept: ['anión']
+  hints:
+    - 'Se forma cuando un átomo gana electrones.'
+  explanation: 'Un **anión** es un ion negativo: ha ganado electrones. Ejemplos: $\ce{Cl-}$, $\ce{O^2-}$.'
+
+- id: chem.matter-atoms.ex08
+  type: multiple-choice
+  objective: chem.matter-atoms.o2
+  difficulty: 2
+  revision: 1
+  prompt: 'Los isótopos de un mismo elemento se diferencian en el número de…'
+  options:
+    - { id: a, text: 'neutrones', correct: true }
+    - { id: b, text: 'protones', misconception: isotope-proton }
+    - { id: c, text: 'electrones', misconception: ion-vs-isotope }
+    - { id: d, text: 'protones y electrones', misconception: isotope-proton }
+  hints:
+    - 'Si cambiara el número de protones, ¿seguiría siendo el mismo elemento?'
+  explanation: 'Todos los isótopos de un elemento tienen el mismo $Z$ (protones) y distinto $A$, así que difieren en el número de **neutrones**.'
+
+- id: chem.matter-atoms.ex09
+  type: short-text
+  objective: chem.matter-atoms.o2
+  difficulty: 2
+  revision: 1
+  prompt: 'Escribe el **símbolo químico** del elemento con $Z = 11$.'
+  accept: ['Na']
+  normalize: { case: false, accents: true, whitespace: true }
+  hints:
+    - 'Es un metal alcalino; su nombre en latín es *natrium*.'
+  explanation: 'El elemento con 11 protones es el sodio, cuyo símbolo es **Na**. Las mayúsculas importan: la primera letra va en mayúscula y la segunda en minúscula.'

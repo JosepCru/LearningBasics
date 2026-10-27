@@ -1,0 +1,41 @@
+.tile {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 3.25rem;
+  height: 3.25rem;
+  border: 2px solid var(--accent);
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+.number {
+  position: absolute;
+  top: 0.2rem;
+  left: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.symbol {
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  translate: 0 0.15rem;
+}
+
+.lg {
+  width: 4.5rem;
+  height: 4.5rem;
+}
+.lg .number {
+  font-size: 0.75rem;
+}
+.lg .symbol {
+  font-size: 1.85rem;
+}

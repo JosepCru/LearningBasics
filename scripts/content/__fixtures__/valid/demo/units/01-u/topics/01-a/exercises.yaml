@@ -1,0 +1,33 @@
+- id: demo.a.ex01
+  type: numeric
+  objective: demo.a.o1
+  difficulty: 2
+  revision: 1
+  prompt: "Masa molar del $\\ce{H2O}$."
+  answer:
+    value: 18.02
+    unit: g/mol
+    tolerance: { relative: 0.005 }
+  verify: "molarMass('H2O')"
+  hints: ["Suma las masas atómicas."]
+  explanation: "2(1.008) + 16.00"
+
+- id: demo.a.ex02
+  type: multiple-choice
+  objective: demo.a.o1
+  difficulty: 1
+  revision: 1
+  prompt: "¿Cuál es un anión?"
+  options:
+    - { id: a, text: "$\\ce{Na+}$", misconception: charge-sign }
+    - { id: b, text: "$\\ce{Cl-}$", correct: true }
+  explanation: "Carga negativa."
+
+- id: demo.a.ex03
+  type: short-text
+  objective: demo.a.o1
+  difficulty: 1
+  revision: 1
+  prompt: "Partícula sin carga."
+  accept: [neutrón]
+  explanation: "El neutrón no tiene carga."

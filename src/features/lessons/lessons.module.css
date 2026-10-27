@@ -1,0 +1,149 @@
+.crumbs {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.topicHeader {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  letter-spacing: -0.015em;
+  margin: 0 0 0.4rem;
+}
+
+.lede {
+  margin: 0;
+  color: var(--muted);
+}
+
+.prereq {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.panel {
+  margin: 1.5rem 0;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  max-width: var(--measure);
+}
+
+.panelTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 0.6rem;
+}
+
+.objectives {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+.objectives li + li {
+  margin-top: 0.3rem;
+}
+
+.lessonList {
+  list-style: none;
+  counter-reset: lesson;
+  padding: 0;
+  margin: 0 0 2rem;
+  border-top: 1px solid var(--line);
+}
+.lessonList li {
+  counter-increment: lesson;
+  border-bottom: 1px solid var(--line);
+}
+.lessonLink {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 1rem;
+  padding: 0.85rem 0.25rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+.lessonLink::before {
+  content: counter(lesson);
+  font-family: var(--font-mono);
+  color: var(--muted);
+  width: 1.2rem;
+}
+.lessonLink:hover .lessonName {
+  color: var(--accent);
+}
+.lessonName {
+  font-weight: 600;
+  flex: 1 1 14rem;
+}
+
+.lessonMeta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 1rem;
+}
+.lessonLink .lessonMeta {
+  margin: 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badgeDraft {
+  border-color: var(--warn);
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.sources {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.9rem;
+  color: var(--muted);
+  max-width: var(--measure);
+}
+.sources ul {
+  padding-left: 1.2rem;
+  margin: 0;
+}
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+}

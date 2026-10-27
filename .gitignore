@@ -4,6 +4,7 @@ dist/
 dist-ssr/
 coverage/
 src/generated/
+public/generated/
 
 # Variables de entorno (solo se versiona el ejemplo)
 .env

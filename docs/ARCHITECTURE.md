@@ -98,25 +98,32 @@ y proyecciones se testean como funciones puras, sin navegador.
 4. Evalúa cada expresión `verify` y la compara con `answer.value` dentro de la tolerancia.
 5. Renderiza Markdown (GFM, KaTeX, mhchem, bloques `:::worked-example`) a HTML.
 6. Emite `src/generated/content/manifest.json` (árbol ligero) y un JSON por tema,
-   cargado bajo demanda. Incluye un hash de contenido para invalidar cachés.
+   cargado bajo demanda. Incluye un hash de contenido para invalidar cachés. Las imágenes
+   se copian a `public/generated/content-assets/<topicId>/`. Ambas carpetas se regeneran
+   en cada build y no se versionan.
 
-`npm run validate-content` ejecuta los pasos 1–4 sin emitir nada.
+`npm run validate-content` ejecuta los pasos 1–5 sin escribir nada (salvo el lock con
+`--update-lock`).
+
+Código: `scripts/content/` (`load` → `validate` → `compile`, orquestados por `pipeline`),
+`scripts/chem/` (fórmulas, pesos atómicos, intérprete de `verify`).
+
+Como el enrutado usa hash, la ruta del documento es siempre `/LearningBasics/`; por eso las
+URLs relativas de imágenes (`generated/...`) funcionan en cualquier página.
 
 ## Tipos de interacción extensibles
 
-Los ejercicios se registran en un mapa `exerciseTypes`:
+Los tipos de ejercicio son una unión discriminada por `type`. Añadir contenido de un tipo
+existente no requiere código. Un tipo nuevo de interacción (p. ej. escritura de hanzi,
+audio) toca cuatro sitios, y TypeScript señala los que falten:
 
-```ts
-type ExerciseTypeDef<E, R> = {
-  schema: ZodType<E>;                         // esquema del ejercicio en content/
-  responseSchema: ZodType<R>;                 // respuesta guardada en el evento
-  evaluate: (exercise: E, response: R) => EvaluationResult;
-  Component: React.FC<ExerciseProps<E, R>>;   // UI
-};
-```
+1. Esquema de autoría en `src/core/content/schemas.ts` (y añadirlo a `Exercise`).
+2. Tipo compilado en `src/core/content/compiled.ts` y su conversión en `scripts/content/compile.ts`.
+3. Evaluador en `src/core/evaluation/` y su caso en `evaluate()` (`index.ts`).
+4. Interfaz de respuesta en `src/features/practice/ExerciseCard.tsx`.
 
-Añadir contenido de un tipo existente no requiere código. Un tipo nuevo de interacción
-(p. ej. escritura de hanzi, audio) sí: se añade una entrada al registro.
+Con tres tipos, una unión con `switch` exhaustivo es más simple que un registro dinámico;
+si los tipos crecen, se puede extraer un registro.
 
 ## Modelo de eventos
 

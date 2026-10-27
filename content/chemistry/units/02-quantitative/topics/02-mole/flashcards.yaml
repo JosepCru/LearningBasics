@@ -1,0 +1,29 @@
+- id: chem.mole.fc01
+  objective: chem.mole.o1
+  front: '¿Cómo se define el **mol** desde 2019?'
+  back: 'La cantidad de sustancia que contiene exactamente $6.02214076 \times 10^{23}$ entidades elementales.'
+
+- id: chem.mole.fc02
+  objective: chem.mole.o1
+  front: 'Valor y unidades de la **constante de Avogadro**'
+  back: '$N_A = 6.02214076 \times 10^{23}\ \text{mol}^{-1}$ (≈ $6.022 \times 10^{23}$)'
+
+- id: chem.mole.fc03
+  objective: chem.mole.o2
+  front: '¿Qué es la **masa molar** y en qué unidades se expresa?'
+  back: 'La masa de un mol de sustancia, en g/mol. Para un elemento tiene el mismo valor numérico que su masa atómica en u.'
+
+- id: chem.mole.fc04
+  objective: chem.mole.o3
+  front: 'Relación entre masa $m$, moles $n$ y masa molar $M$'
+  back: '$n = \dfrac{m}{M}$ y $m = n \cdot M$'
+
+- id: chem.mole.fc05
+  objective: chem.mole.o3
+  front: 'Relación entre moles $n$ y número de entidades $N$'
+  back: '$N = n \cdot N_A$ y $n = \dfrac{N}{N_A}$'
+
+- id: chem.mole.fc06
+  objective: chem.mole.o3
+  front: 'Para pasar de **gramos** a **partículas**, ¿cuál es el paso intermedio?'
+  back: 'Los moles: gramos → (÷ M) → moles → (× $N_A$) → partículas.'

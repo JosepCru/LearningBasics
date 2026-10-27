@@ -1,0 +1,261 @@
+/* Tokens de diseño. Claro por defecto; oscuro por preferencia del sistema o elección manual. */
+:root {
+  --bg: #f6f8fa;
+  --surface: #ffffff;
+  --surface-sunken: #eef2f5;
+  --ink: #14212b;
+  --muted: #566672;
+  --line: #d6dee5;
+  --accent: #1b6f94; /* azul sulfato de cobre */
+  --accent-ink: #ffffff;
+  --accent-soft: #e2f0f6;
+  --correct: #1d7447;
+  --correct-soft: #e3f3ea;
+  --incorrect: #b0362c;
+  --incorrect-soft: #fbe9e7;
+  --warn: #855600;
+  --warn-soft: #fbf0d9;
+  --focus: #1b6f94;
+
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-read: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, Georgia, serif;
+  --font-mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
+
+  --radius: 8px;
+  --measure: 68ch;
+  --gutter: 16px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0e161c;
+    --surface: #15212a;
+    --surface-sunken: #101b22;
+    --ink: #e3eaf0;
+    --muted: #93a4b1;
+    --line: #263541;
+    --accent: #62b8dc;
+    --accent-ink: #08151c;
+    --accent-soft: #16303d;
+    --correct: #5cc48e;
+    --correct-soft: #13301f;
+    --incorrect: #f08a80;
+    --incorrect-soft: #3a1a17;
+    --warn: #e2b04a;
+    --warn-soft: #33270d;
+    --focus: #62b8dc;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #0e161c;
+  --surface: #15212a;
+  --surface-sunken: #101b22;
+  --ink: #e3eaf0;
+  --muted: #93a4b1;
+  --line: #263541;
+  --accent: #62b8dc;
+  --accent-ink: #08151c;
+  --accent-soft: #16303d;
+  --correct: #5cc48e;
+  --correct-soft: #13301f;
+  --incorrect: #f08a80;
+  --incorrect-soft: #3a1a17;
+  --warn: #e2b04a;
+  --warn-soft: #33270d;
+  --focus: #62b8dc;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.15em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Botones */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  min-height: 44px;
+  padding: 0.55em 1.1em;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn:hover {
+  border-color: var(--muted);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.btn-primary:hover {
+  border-color: var(--accent);
+  filter: brightness(1.08);
+}
+.btn-quiet {
+  border-color: transparent;
+  background: transparent;
+  color: var(--accent);
+  padding-inline: 0.5em;
+}
+
+/* Contenido renderizado (lecciones, enunciados, explicaciones) */
+.prose {
+  font-family: var(--font-read);
+  font-size: 1.125rem;
+  line-height: 1.65;
+  max-width: var(--measure);
+  overflow-wrap: break-word;
+  /* Cifras alineadas: Georgia/Charter usan cifras elzevirianas por defecto. */
+  font-variant-numeric: lining-nums;
+}
+.prose h2 {
+  font-family: var(--font-ui);
+  font-size: 1.2rem;
+  margin: 2em 0 0.6em;
+}
+.prose h3 {
+  font-family: var(--font-ui);
+  font-size: 1.05rem;
+}
+.prose p,
+.prose ul,
+.prose ol {
+  margin: 0 0 1em;
+}
+.prose li + li {
+  margin-top: 0.3em;
+}
+.prose table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 1em 0 1.4em;
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+}
+.prose th,
+.prose td {
+  padding: 0.45em 0.8em;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+.prose th {
+  border-bottom-width: 2px;
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-sunken);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+.prose img {
+  max-width: 100%;
+  height: auto;
+}
+.prose .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25em 0;
+}
+.prose > :first-child {
+  margin-top: 0;
+}
+.prose > :last-child {
+  margin-bottom: 0;
+}
+
+.block {
+  margin: 1.4em 0;
+  padding: 1em 1.2em;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--accent-soft);
+}
+.block-pitfall {
+  border-left-color: var(--warn);
+  background: var(--warn-soft);
+}
+.block-note {
+  border-left-color: var(--muted);
+  background: var(--surface-sunken);
+}
+/* Sin mayúsculas forzadas: en química cambiarían el significado (Ca → CA). */
+.block-title {
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--muted);
+  margin: 0 0 0.5em;
+}
+.block > :last-child {
+  margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
