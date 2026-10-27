@@ -2,6 +2,8 @@ import { HashRouter, Route, Routes } from 'react-router';
 import { LessonPage } from '../features/lessons/LessonPage';
 import { TopicPage } from '../features/lessons/TopicPage';
 import { PracticePage } from '../features/practice/PracticePage';
+import { ProgressPage } from '../features/progress/ProgressPage';
+import { ReviewPage } from '../features/review/ReviewPage';
 import { HomePage } from '../features/subjects/HomePage';
 import { SubjectPage } from '../features/subjects/SubjectPage';
 import { NotFoundPage } from '../ui/NotFoundPage';
@@ -21,6 +23,8 @@ export function App() {
           <Route path="topics/:topicId" element={<TopicPage />} />
           <Route path="lessons/:lessonId" element={<LessonPage />} />
           <Route path="practice/:topicId" element={<PracticePage />} />
+          <Route path="review" element={<ReviewPage />} />
+          <Route path="progress" element={<ProgressPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

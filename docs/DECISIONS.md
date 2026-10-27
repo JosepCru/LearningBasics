@@ -22,6 +22,11 @@ Cada decisión indica su estado. Para cambiar una decisión, añade una entrada 
 | D-016 | Una sola copia de KaTeX en todo el proyecto (`overrides` en package.json) | Aprobada | 2026-10-27 |
 | D-017 | Sin fuentes web: tipografías del sistema (serif para leer, sans para la interfaz, mono para datos) | Aprobada | 2026-10-27 |
 | D-018 | Las directivas Markdown en línea (`:texto`) se tratan como texto normal; solo existen bloques `:::` | Aprobada | 2026-10-27 |
+| D-019 | Un evento `attempt` por encuentro con un ejercicio (con `tries` y `feedback[]`), no por respuesta | Aprobada | 2026-10-27 |
+| D-020 | Una flashcard nueva se desbloquea al marcar como leída una lección de su objetivo | Aprobada | 2026-10-27 |
+| D-021 | Máximo 10 tarjetas nuevas al día (`REVIEW_DEFAULTS.newPerDay`) | Aprobada | 2026-10-27 |
+| D-022 | FSRS con fuzz activado: es determinista para unas mismas entradas (verificado en tests) | Aprobada | 2026-10-27 |
+| D-023 | El tema claro/oscuro es preferencia del dispositivo (localStorage), no un evento sincronizado | Aprobada | 2026-10-27 |
 
 ## Notas
 
@@ -36,4 +41,10 @@ Cada decisión indica su estado. Para cambiar una decisión, añade una entrada 
 - **D-017**: cero dependencias y nada que descargar para funcionar offline (Fase 5). Las
   lecciones usan cifras alineadas (`lining-nums`) porque Georgia usa cifras elzevirianas.
 - **D-018**: con directivas en línea, «10:30» o «1:2» se interpretaban como directivas.
+- **D-020**: repasar tarjetas de algo que aún no has estudiado genera fallos sin aprendizaje.
+- **D-021**: cada tarjeta nueva genera varios repasos en las semanas siguientes; limitar las
+  nuevas evita una avalancha de repasos. Pasará a ser configurable con el plan diario (Fase 4).
+- **D-022**: el estado de las tarjetas se reconstruye reproduciendo repasos en cada
+  dispositivo; si el fuzz fuera aleatorio, dos dispositivos calcularían fechas distintas.
+- **D-023**: es razonable querer modo oscuro en el móvil y claro en el escritorio.
 - **D-008**: el OTP funciona entre dispositivos y no deja tokens en el fragmento `#` de la URL, que chocaría con `HashRouter`.

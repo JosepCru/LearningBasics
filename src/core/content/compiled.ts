@@ -17,7 +17,11 @@ export type LessonSummary = {
   title: string;
   estimatedMinutes: number;
   provenance: Provenance;
+  objectives: string[];
 };
+
+/** Datos mínimos de un ejercicio o tarjeta para progreso y planificación. */
+export type ItemRef = { topicId: string; objective: string; revision: number };
 
 export type TopicSummary = {
   id: string;
@@ -48,6 +52,10 @@ export type ContentManifest = {
   topicIndex: Record<string, { subjectId: string; unitId: string }>;
   /** lessonId → topicId */
   lessonIndex: Record<string, string>;
+  /** Ejercicios activos, en orden del currículo. */
+  exerciseIndex: Record<string, ItemRef>;
+  /** Flashcards activas, en orden del currículo. */
+  flashcardIndex: Record<string, ItemRef>;
 };
 
 export type CompiledLesson = {

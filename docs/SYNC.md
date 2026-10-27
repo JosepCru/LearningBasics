@@ -29,32 +29,51 @@ type EventBase = {
 
 | type | payload |
 |---|---|
-| `attempt` | `exerciseId, exerciseRevision, response, result ('correct'\|'incorrect'), hintsUsed, solutionViewedBefore, selfGraded, errorTags[], durationMs` |
-| `review` | `cardId, rating (1–4), reviewedAt, durationMs` |
+| `attempt` | `exerciseId, exerciseRevision, objectiveId, result ('correct'\|'incorrect'), tries, hintsUsed, solutionViewed, selfGraded, feedback[], errorTags[], lastResponse, durationMs` |
+| `review` | `cardId, cardRevision, rating (1–4), reviewedAt, durationMs` |
 | `session_segment` | `startedAt, endedAt, activeMs, activity ('lesson'\|'practice'\|'review')` |
 | `lesson` | `lessonId, action ('opened'\|'completed')` |
 | `setting` | `key, value` |
 | `void` | `targetEventId, reason` |
 
-Cada payload tiene su esquema Zod en `core/events`. Un evento con `schemaVersion`
-desconocido se conserva pero se ignora en las proyecciones (compatibilidad hacia delante).
+Cada payload tiene su esquema Zod en `src/core/events/schemas.ts`.
+
+**Un `attempt` resume un encuentro completo con un ejercicio** (desde que aparece hasta
+que pulsas «Siguiente»), no cada respuesta comprobada: `tries` cuenta las comprobaciones y
+`feedback` guarda el código de cada una. Así el dominio puntúa el encuentro entero (ver
+MASTERY.md). Limitación: si abandonas un ejercicio a medias, no se registra.
+
+`objectiveId` se guarda en el intento aunque pueda deducirse del contenido: si un ejercicio
+cambia de objetivo, su historial sigue contando para el objetivo que se practicó.
+
+Pendiente para la Fase 3: hoy `schemaVersion` solo admite 1. Al recibir eventos remotos,
+los de versiones futuras se conservarán sin aplicarse en las proyecciones.
 
 ## IndexedDB (Dexie)
 
-| Tabla | Clave | Contenido |
-|---|---|---|
-| `events` | `id` | Todos los eventos (locales y recibidos) |
-| `outbox` | `eventId` | Eventos pendientes de subir + `attempts`, `nextAttemptAt`, `lastError` |
-| `quarantine` | `eventId` | Eventos rechazados por el servidor (4xx de validación) |
-| `syncState` | singleton | `cursor` (último `seq`), `lastSuccessAt`, `lastError`, `status` |
-| `meta` | clave | `deviceId`, `contentHash`, `dbVersion` |
-| proyecciones | varias | `cardStates`, `masteryByObjective`, `lessonProgress`, `dailyTotals`, `settings` |
+Implementado en `src/data/` (Fase 2):
 
-- Crear un evento y su entrada en `outbox` ocurre en **una sola transacción**.
-- Las proyecciones se actualizan incrementalmente; `rebuildProjections()` las recalcula
-  desde `events` (tras migraciones o importaciones grandes).
+| Tabla | Clave e índices | Contenido |
+|---|---|---|
+| `events` | `id`, `type`, `clientCreatedAt`, `payload.cardId` | Todos los eventos |
+| `outbox` | `eventId`, `nextAttemptAt` | Eventos pendientes de subir (se rellena desde la Fase 2; se vacía en la 3) |
+| `cardStates` | `cardId`, `due` | Proyección: estado FSRS de cada tarjeta + `firstReviewAt` |
+| `meta` | `key` | `deviceId` |
+
+Previstas para la Fase 3: `quarantine` (eventos rechazados por el servidor) y `syncState`
+(cursor, último éxito, último error).
+
+- Crear un evento y su entrada en `outbox` ocurre en **una sola transacción**
+  (`appendEvent` en `src/data/events.ts`), junto con la actualización de proyecciones.
+- **Proyecciones**: `cardStates` se guarda y se actualiza de forma incremental. Si llega un
+  repaso anterior al último conocido, o un `void` sobre un repaso, se reproduce esa tarjeta
+  entera. El dominio, las lecciones leídas y la cola de repaso se calculan en memoria a partir
+  de los eventos, porque son baratos con el volumen actual. Si crecen, pasarán a ser tablas.
+- `rebuildProjections()` recalcula todo desde los eventos; un test comprueba que da
+  exactamente el mismo resultado que el camino incremental.
 - Al arrancar se llama a `navigator.storage.persist()`.
-- Las migraciones de Dexie se versionan y se testean (v_n → v_n+1 con datos reales de prueba).
+- Las migraciones de Dexie se versionan: nunca se edita una versión publicada. Hoy solo
+  existe la v1; el test de migración v1 → v2 se escribirá con el primer cambio de esquema.
 
 ### Antes de iniciar sesión
 

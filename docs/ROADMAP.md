@@ -8,7 +8,7 @@ No se empieza una fase hasta que la anterior está probada y explicada.
 |---|---|
 | 0 — Arquitectura y especificación | ✅ Completada |
 | 1 — Shell, sistema de contenido, lecciones y ejercicios de química | ✅ Completada |
-| 2 — Persistencia local, historial, flashcards y progreso | Pendiente |
+| 2 — Persistencia local, historial, flashcards y progreso | ✅ Completada |
 | 3 — Autenticación Supabase y sincronización | Pendiente |
 | 4 — Dashboard diario, plan de estudio y temporizador | Pendiente |
 | 5 — PWA, offline, backup/restore, accesibilidad y endurecimiento | Pendiente |
@@ -59,12 +59,20 @@ sesión de repaso; vista de progreso por asignatura/tema/objetivo; dominio segú
 MASTERY.md; exportación JSON.
 
 **Aceptación**
-- [ ] Recargar o cerrar la app conserva intentos, repasos y progreso.
-- [ ] `rebuildProjections()` reproduce exactamente el estado incremental.
-- [ ] Tests de FSRS con fechas fijas (adaptador).
-- [ ] Tests de dominio con los casos de MASTERY.md.
-- [ ] Test de migración Dexie con datos de ejemplo.
-- [ ] La exportación produce un archivo válido según el esquema.
+- [x] Recargar o cerrar la app conserva intentos, repasos y progreso (test + navegador).
+- [x] `rebuildProjections()` reproduce exactamente el estado incremental.
+- [x] Tests de FSRS con fechas fijas, orden de llegada indiferente y determinismo con fuzz.
+- [x] Tests de dominio con los casos de MASTERY.md.
+- [~] Migraciones Dexie: test de persistencia al cerrar y reabrir. El test v1 → v2 se escribirá con el primer cambio de esquema (hoy solo existe la v1).
+- [x] La exportación produce un archivo válido según el esquema.
+
+**Limitaciones conocidas**
+- Un ejercicio abandonado a medias (sin pulsar «Siguiente») no se registra.
+- La importación llega en la Fase 3, junto con la fusión de varios dispositivos.
+- Dominio, lecciones leídas y cola de repaso se calculan en memoria desde los eventos.
+- Bundle principal: 164 kB gzip (antes 92) por Dexie, Zod y ts-fsrs.
+- El botón de descarga de la copia no se probó en el navegador (sí en tests unitarios).
+- Límite de 10 tarjetas nuevas al día fijo hasta el plan diario (Fase 4).
 
 ## Fase 3 — Supabase y sincronización
 

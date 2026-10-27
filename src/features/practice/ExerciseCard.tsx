@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import type { CompiledExercise } from '../../core/content/compiled';
 import { evaluate, type EvaluationResult, type ExerciseResponse } from '../../core/evaluation';
+import type { AttemptPayload } from '../../core/events/schemas';
 import { shuffledOrder } from '../../core/evaluation/choice';
 import { Html } from '../../ui/Html';
 import { feedbackMessage, type ExerciseOutcome } from './feedback';
@@ -10,14 +11,17 @@ type Props = {
   exercise: CompiledExercise;
   /** Semilla de la sesión para barajar opciones de forma estable. */
   seed: string;
-  onDone: (outcome: ExerciseOutcome) => void;
+  /** Se llama al pulsar "Siguiente", con el resumen del intento para guardarlo. */
+  onDone: (outcome: ExerciseOutcome, attempt: AttemptPayload) => void;
   isLast: boolean;
 };
 
 export function ExerciseCard({ exercise, seed, onDone, isLast }: Props) {
+  const [startedAt] = useState(() => Date.now());
   const [text, setText] = useState('');
   const [optionId, setOptionId] = useState<string | null>(null);
   const [results, setResults] = useState<EvaluationResult[]>([]);
+  const [lastResponse, setLastResponse] = useState('');
   const [hintsShown, setHintsShown] = useState(0);
   const [solutionShown, setSolutionShown] = useState(false);
   const [selfGraded, setSelfGraded] = useState(false);
@@ -52,6 +56,9 @@ export function ExerciseCard({ exercise, seed, onDone, isLast }: Props) {
       setResults([result]);
       return;
     }
+    if (result.feedback !== 'unparseable') {
+      setLastResponse(response.type === 'multiple-choice' ? response.optionId : response.text.trim().slice(0, 500));
+    }
     setResults((r) => [...r.filter((x) => x.feedback !== 'unparseable'), result]);
   };
 
@@ -62,6 +69,21 @@ export function ExerciseCard({ exercise, seed, onDone, isLast }: Props) {
     const unaided = realAttempts.length === 1 && hintsShown === 0 && !solutionShown && !selfGraded;
     return unaided ? 'correct-unaided' : 'correct-with-help';
   };
+
+  const attemptPayload = (): AttemptPayload => ({
+    exerciseId: exercise.id,
+    exerciseRevision: exercise.revision,
+    objectiveId: exercise.objective,
+    result: solved ? 'correct' : 'incorrect',
+    tries: realAttempts.length,
+    hintsUsed: hintsShown,
+    solutionViewed: solutionShown,
+    selfGraded,
+    feedback: realAttempts.map((r) => r.feedback),
+    errorTags: [...new Set(realAttempts.flatMap((r) => r.errorTags))],
+    lastResponse,
+    durationMs: Math.max(0, Math.round(Date.now() - startedAt)),
+  });
 
   const selectedOption = exercise.type === 'multiple-choice' ? exercise.options.find((o) => o.id === optionId) : undefined;
   const feedbackTone = !last ? '' : last.correct || selfGraded ? styles.good : last.feedback === 'unparseable' ? styles.info : styles.bad;
@@ -184,7 +206,7 @@ export function ExerciseCard({ exercise, seed, onDone, isLast }: Props) {
             <h3 className={styles.revealTitle}>Por qué</h3>
             <Html html={exercise.explanationHtml} className="prose" />
           </section>
-          <button ref={nextRef} type="button" className="btn btn-primary" onClick={() => onDone(outcome())}>
+          <button ref={nextRef} type="button" className="btn btn-primary" onClick={() => onDone(outcome(), attemptPayload())}>
             {isLast ? 'Ver resumen' : 'Siguiente ejercicio'}
           </button>
         </div>

@@ -46,6 +46,9 @@ describe('contenido de ejemplo válido', () => {
     expect(assets).toHaveLength(1);
     expect(topics[1]!.lessons[0]!.html).toContain('10:30');
     expect(manifest.lessonIndex['demo.b.l1']).toBe('demo.b');
+    expect(manifest.exerciseIndex['demo.a.ex01']).toEqual({ topicId: 'demo.a', objective: 'demo.a.o1', revision: 1 });
+    expect(manifest.flashcardIndex['demo.a.fc01']).toEqual({ topicId: 'demo.a', objective: 'demo.a.o1', revision: 1 });
+    expect(manifest.subjects[0]!.units[0]!.topics[0]!.lessons[0]!.objectives).toEqual(['demo.a.o1']);
     expect(manifest.subjects[0]!.units[0]!.topics[0]!.exerciseCount).toBe(3);
     expect(manifest.contentHash).toMatch(/^[0-9a-f]{16}$/);
   });

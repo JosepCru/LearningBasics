@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { Html } from '../../ui/Html';
 import { NotFoundPage } from '../../ui/NotFoundPage';
 import { useDocumentTitle } from '../../ui/useDocumentTitle';
 import { findTopic, manifest, useTopicContent } from '../content/content';
 import { TopicLoadState } from '../content/TopicLoadState';
+import { recordLesson, useCompletedLessons } from '../learning/learning';
 import { ProvenanceBadge } from './ProvenanceBadge';
 import styles from './lessons.module.css';
 
@@ -13,6 +15,8 @@ export function LessonPage() {
   const loc = topicId ? findTopic(topicId) : undefined;
   const summary = loc?.topic.lessons.find((l) => l.id === lessonId);
   const state = useTopicContent(topicId);
+  const completed = useCompletedLessons();
+  const [saveError, setSaveError] = useState(false);
   useDocumentTitle(summary?.title ?? 'No encontrado');
 
   if (!loc || !summary) return <NotFoundPage />;
@@ -41,6 +45,33 @@ export function LessonPage() {
       {lesson && (
         <>
           <Html html={lesson.html} className="prose" />
+
+          <div className={styles.readBox}>
+            {completed?.has(lessonId) ? (
+              <p className={styles.readDone}>✓ Lección leída. Sus tarjetas ya están en Repaso.</p>
+            ) : (
+              <>
+                <button
+                  className="btn btn-primary"
+                  disabled={!completed}
+                  onClick={() =>
+                    recordLesson({ lessonId, action: 'completed' }).catch((e: unknown) => {
+                      console.error(e);
+                      setSaveError(true);
+                    })
+                  }
+                >
+                  Marcar como leída
+                </button>
+                <span className={styles.muted}>Desbloquea sus tarjetas de repaso.</span>
+              </>
+            )}
+            {saveError && (
+              <p role="alert" className={styles.muted}>
+                No se pudo guardar en este dispositivo. Vuelve a intentarlo.
+              </p>
+            )}
+          </div>
 
           <section aria-labelledby="sources" className={styles.sources}>
             <h2 id="sources" className={styles.panelTitle}>

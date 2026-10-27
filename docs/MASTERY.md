@@ -8,16 +8,28 @@
 El dominio se calcula **por objetivo de aprendizaje** y se agrega por tema (media de sus
 objetivos con evidencia) y por asignatura.
 
+## Implementación
+
+- `src/core/mastery/mastery.ts`: agregación, pesos, bandas y errores repetidos
+  (`MASTERY_CONFIG` reúne todos los parámetros).
+- `src/core/mastery/score.ts`: `scoreAttempt`, la puntuación de cada intento, con los valores
+  de la tabla de abajo (el propietario prefirió no escribirla; D-013). `score.test.ts` fija
+  solo sus propiedades (rango, extremos y monotonía), así que los valores intermedios se
+  pueden ajustar sin tocar los tests.
+- Tests: `mastery.test.ts` usa una puntuación de referencia fija (la tabla de abajo) para
+  probar el resto del cálculo de forma independiente.
+
 ## Evidencia
 
-Cada evento `attempt` no anulado aporta evidencia al objetivo de su ejercicio.
+Cada evento `attempt` no anulado aporta evidencia al objetivo con el que se registró.
+Un intento resume un encuentro completo con el ejercicio (ver SYNC.md).
 
-### Puntuación por intento (valores iniciales, ajustables)
+### Puntuación por intento (valores de referencia; la versión vigente está en `score.ts`)
 
 | Resultado | Puntuación |
 |---|---|
 | Correcto sin pistas ni solución | 1.0 |
-| Correcto tras pistas | 0.6 |
+| Correcto tras pistas o tras reintentar (sin ver la solución) | 0.6, sea cual sea el número de pistas |
 | Correcto autoevaluado (texto corto) | 0.8 |
 | Incorrecto, o solución vista antes de responder | 0.0 |
 

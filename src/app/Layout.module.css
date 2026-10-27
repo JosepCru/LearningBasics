@@ -58,6 +58,21 @@
   background: var(--surface-sunken);
 }
 
+.badge {
+  display: inline-block;
+  min-width: 1.4em;
+  margin-left: 0.35em;
+  padding: 0 0.4em;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
 .theme select {
   min-height: 36px;
   padding: 0.25rem 0.5rem;
@@ -80,8 +95,21 @@
   outline: none;
 }
 
-@media (max-width: 520px) {
+@media (max-width: 640px) {
   .brand {
     display: none;
+  }
+}
+
+/* En móvil las asignaturas se alcanzan desde Inicio; la barra queda con lo diario. */
+@media (max-width: 480px) {
+  .subjectLink {
+    display: none;
+  }
+  .header {
+    gap: 0.5rem;
+  }
+  .nav a {
+    padding: 0.5rem 0.5rem;
   }
 }

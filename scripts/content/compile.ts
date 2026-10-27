@@ -32,6 +32,8 @@ export function compileContent(tree: ContentTree): CompileResult {
   const topics: TopicContent[] = [];
   const topicIndex: ContentManifest['topicIndex'] = {};
   const lessonIndex: ContentManifest['lessonIndex'] = {};
+  const exerciseIndex: ContentManifest['exerciseIndex'] = {};
+  const flashcardIndex: ContentManifest['flashcardIndex'] = {};
 
   for (const { subject, unit, topic } of allTopics(tree)) {
     const topicId = topic.data.id;
@@ -124,6 +126,9 @@ export function compileContent(tree: ContentTree): CompileResult {
         backHtml: md(data.back, file, topic.dir, data.id, true),
       }));
 
+    for (const e of exercises) exerciseIndex[e.id] = { topicId, objective: e.objective, revision: e.revision };
+    for (const f of flashcards) flashcardIndex[f.id] = { topicId, objective: f.objective, revision: f.revision };
+
     const citedRefs = new Set(lessons.flatMap((l) => l.sources.map((s) => s.ref)));
     topics.push({
       id: topicId,
@@ -158,6 +163,7 @@ export function compileContent(tree: ContentTree): CompileResult {
             title: l.title,
             estimatedMinutes: l.estimatedMinutes,
             provenance: l.provenance,
+            objectives: l.objectives,
           })),
           exerciseCount: content.exercises.length,
           flashcardCount: content.flashcards.length,
@@ -167,7 +173,7 @@ export function compileContent(tree: ContentTree): CompileResult {
   }));
 
   return {
-    manifest: { contentHash: hashDirectory(tree.root), subjects, topicIndex, lessonIndex },
+    manifest: { contentHash: hashDirectory(tree.root), subjects, topicIndex, lessonIndex, exerciseIndex, flashcardIndex },
     topics,
     assets: [...assets.values()],
     errors,

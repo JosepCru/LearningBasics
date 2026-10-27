@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
 import { manifest } from '../features/content/content';
+import { useNow, useReviewQueue } from '../features/learning/learning';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import { useTheme, type ThemeChoice } from '../ui/theme';
 import styles from './Layout.module.css';
 
@@ -9,6 +11,8 @@ const THEME_LABELS: Record<ThemeChoice, string> = { system: 'Sistema', light: 'C
 export function Layout() {
   const [theme, setTheme] = useTheme();
   const { pathname } = useLocation();
+  const queue = useReviewQueue(useNow());
+  const pending = queue ? queue.due.length + queue.fresh.length : 0;
 
   // Al cambiar de página, empezar arriba y llevar el foco al contenido (lectores de pantalla).
   useEffect(() => {
@@ -18,10 +22,14 @@ export function Layout() {
 
   return (
     <div className={styles.shell}>
-      <a href="#main" className={styles.skip} onClick={(e) => {
-        e.preventDefault();
-        document.getElementById('main')?.focus();
-      }}>
+      <a
+        href="#main"
+        className={styles.skip}
+        onClick={(e) => {
+          e.preventDefault();
+          document.getElementById('main')?.focus();
+        }}
+      >
         Saltar al contenido
       </a>
       <header className={styles.header}>
@@ -32,8 +40,17 @@ export function Layout() {
           <NavLink to="/" end>
             Inicio
           </NavLink>
+          <NavLink to="/review">
+            Repaso
+            {pending > 0 && (
+              <span className={styles.badge} aria-label={`${pending} pendientes`}>
+                {pending}
+              </span>
+            )}
+          </NavLink>
+          <NavLink to="/progress">Progreso</NavLink>
           {manifest.subjects.map((s) => (
-            <NavLink key={s.id} to={`/subjects/${s.id}`}>
+            <NavLink key={s.id} to={`/subjects/${s.id}`} className={styles.subjectLink}>
               {s.title}
             </NavLink>
           ))}
@@ -50,7 +67,9 @@ export function Layout() {
         </label>
       </header>
       <main id="main" tabIndex={-1} className={styles.main}>
-        <Outlet />
+        <ErrorBoundary resetKey={pathname}>
+          <Outlet />
+        </ErrorBoundary>
       </main>
     </div>
   );

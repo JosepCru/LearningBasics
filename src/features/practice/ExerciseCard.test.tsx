@@ -62,7 +62,19 @@ describe('ExerciseCard', () => {
     const next = screen.getByRole('button', { name: 'Siguiente ejercicio' });
     expect(next).toHaveFocus();
     await user.click(next);
-    expect(onDone).toHaveBeenCalledWith('correct-with-help');
+    expect(onDone).toHaveBeenCalledWith(
+      'correct-with-help',
+      expect.objectContaining({
+        exerciseId: 'x.ex01',
+        objectiveId: 'x.o1',
+        result: 'correct',
+        tries: 2,
+        hintsUsed: 1,
+        solutionViewed: false,
+        feedback: ['missing-unit', 'correct'],
+        lastResponse: '44.01 g/mol',
+      }),
+    );
   });
 
   it('numérico: acierto a la primera sin ayuda', async () => {
@@ -71,7 +83,7 @@ describe('ExerciseCard', () => {
     render(<ExerciseCard exercise={numeric} seed="s" onDone={onDone} isLast />);
     await user.type(screen.getByLabelText('Tu respuesta (número y unidad)'), '44,0 g/mol{Enter}');
     await user.click(screen.getByRole('button', { name: 'Ver resumen' }));
-    expect(onDone).toHaveBeenCalledWith('correct-unaided');
+    expect(onDone).toHaveBeenCalledWith('correct-unaided', expect.objectContaining({ tries: 1, hintsUsed: 0 }));
   });
 
   it('una respuesta vacía no cuenta como intento', async () => {
@@ -94,6 +106,9 @@ describe('ExerciseCard', () => {
 
     await user.click(screen.getByRole('button', { name: 'Ver solución' }));
     await user.click(screen.getByRole('button', { name: 'Siguiente ejercicio' }));
-    expect(onDone).toHaveBeenCalledWith('not-solved');
+    expect(onDone).toHaveBeenCalledWith(
+      'not-solved',
+      expect.objectContaining({ result: 'incorrect', solutionViewed: true, errorTags: ['charge-sign'], lastResponse: 'a' }),
+    );
   });
 });

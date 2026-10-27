@@ -3,12 +3,16 @@ import { ElementTile } from '../../ui/ElementTile';
 import { NotFoundPage } from '../../ui/NotFoundPage';
 import { useDocumentTitle } from '../../ui/useDocumentTitle';
 import { findTopic, topicTitle } from '../content/content';
+import { useCompletedLessons, useMastery, useNow } from '../learning/learning';
+import { MasteryBadge } from '../progress/MasteryBadge';
 import { ProvenanceBadge } from './ProvenanceBadge';
 import styles from './lessons.module.css';
 
 export function TopicPage() {
   const { topicId = '' } = useParams();
   const loc = findTopic(topicId);
+  const completed = useCompletedLessons();
+  const mastery = useMastery(useNow());
   useDocumentTitle(loc?.topic.title ?? 'No encontrado');
   if (!loc) return <NotFoundPage />;
   const { subject, unit, topic, number } = loc;
@@ -45,7 +49,10 @@ export function TopicPage() {
         </h2>
         <ul className={styles.objectives}>
           {topic.objectives.map((o) => (
-            <li key={o.id}>{o.text}</li>
+            <li key={o.id}>
+              {o.text}{' '}
+              {mastery.status === 'ready' && <MasteryBadge mastery={mastery.byObjective.get(o.id)} />}
+            </li>
           ))}
         </ul>
       </section>
@@ -60,6 +67,7 @@ export function TopicPage() {
               <Link to={`/lessons/${l.id}`} className={styles.lessonLink}>
                 <span className={styles.lessonName}>{l.title}</span>
                 <span className={styles.lessonMeta}>
+                  {completed?.has(l.id) && <span className={styles.done}>✓ Leída</span>}
                   {l.estimatedMinutes} min <ProvenanceBadge provenance={l.provenance} />
                 </span>
               </Link>
@@ -77,7 +85,10 @@ export function TopicPage() {
           <p className={styles.muted}>Este tema aún no tiene ejercicios.</p>
         )}
         {topic.flashcardCount > 0 && (
-          <span className={styles.muted}>{topic.flashcardCount} tarjetas de repaso (disponibles en la próxima versión)</span>
+          <span className={styles.muted}>
+            {topic.flashcardCount} tarjetas de repaso: se desbloquean al marcar las lecciones como leídas.{' '}
+            <Link to="/review">Ir a Repaso</Link>
+          </span>
         )}
       </div>
     </article>

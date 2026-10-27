@@ -1,0 +1,125 @@
+.intro {
+  max-width: 620px;
+}
+
+.title {
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  letter-spacing: -0.015em;
+  margin: 0.5rem 0 0.75rem;
+}
+
+.lede {
+  color: var(--muted);
+  margin: 0 0 1.25rem;
+}
+
+.help {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+}
+.stats div {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.stats dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.stats dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.progress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.topic {
+  flex: 1;
+}
+.newTag {
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.card {
+  max-width: 620px;
+  min-height: 12rem;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.front {
+  font-size: 1.3rem;
+}
+.divider {
+  border: none;
+  border-top: 1px dashed var(--line);
+  margin: 1.25rem 0;
+}
+.back {
+  font-size: 1.15rem;
+}
+
+.actions {
+  max-width: 620px;
+  margin-top: 1rem;
+}
+
+.ratings {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+.ratings button {
+  flex-direction: column;
+  gap: 0.1rem;
+  padding-inline: 0.4rem;
+}
+.interval {
+  font-size: 0.78rem;
+  font-weight: 500;
+  opacity: 0.8;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 420px) {
+  .ratings {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.keys {
+  margin: 0.75rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.error {
+  color: var(--incorrect);
+  font-weight: 600;
+}

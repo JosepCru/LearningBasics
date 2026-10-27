@@ -9,9 +9,19 @@ Funcionará sin conexión y sincronizará el progreso entre dispositivos.
 
 ## Estado
 
-**Fase 1 completada**: aplicación web, sistema de contenido, lecciones y ejercicios de
-química (3 temas, 9 lecciones, 28 ejercicios, 20 flashcards). El progreso **todavía no se
-guarda**; llega en la Fase 2. Ver [docs/ROADMAP.md](docs/ROADMAP.md).
+**Fase 2 completada**: lecciones y ejercicios de química (3 temas, 9 lecciones,
+28 ejercicios, 20 flashcards), historial guardado en el navegador, repaso con FSRS,
+progreso por objetivo y copia de seguridad en JSON. La sincronización entre dispositivos
+llega en la Fase 3. Ver [docs/ROADMAP.md](docs/ROADMAP.md).
+
+### Cómo se usa
+
+1. **Lee una lección** y pulsa «Marcar como leída»: sus tarjetas pasan a Repaso.
+2. **Practica** el tema: cada ejercicio queda registrado al pulsar «Siguiente».
+3. **Repasa** a diario: Espacio para ver la respuesta, teclas 1–4 para valorar.
+4. **Progreso** muestra tu dominio por objetivo, los errores recientes y la copia de seguridad.
+
+Tu historial vive en este navegador. Descarga una copia de vez en cuando desde Progreso.
 
 ## Puesta en marcha (desarrollo local)
 

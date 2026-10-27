@@ -5,6 +5,7 @@ import { Status } from '../../ui/Status';
 import { useDocumentTitle } from '../../ui/useDocumentTitle';
 import { findTopic, useTopicContent } from '../content/content';
 import { TopicLoadState } from '../content/TopicLoadState';
+import { recordAttempt } from '../learning/learning';
 import { ExerciseCard } from './ExerciseCard';
 import type { ExerciseOutcome } from './feedback';
 import styles from './practice.module.css';
@@ -18,6 +19,7 @@ export function PracticePage() {
   const [index, setIndex] = useState(0);
   const [outcomes, setOutcomes] = useState<ExerciseOutcome[]>([]);
   const [seed, setSeed] = useState(newSeed);
+  const [saveError, setSaveError] = useState<string | null>(null);
   useDocumentTitle(loc ? `Práctica: ${loc.topic.title}` : 'No encontrado');
 
   if (!loc) return <NotFoundPage />;
@@ -76,7 +78,7 @@ export function PracticePage() {
             </div>
           </dl>
           <p className={styles.summaryNote}>
-            Esta sesión aún no se guarda: el historial y el progreso llegarán en la próxima versión.
+            {saveError ?? 'Guardado en este dispositivo. Puedes ver la evolución en Progreso.'}
           </p>
           <div className={styles.controls}>
             <button className="btn btn-primary" onClick={restart}>
@@ -106,11 +108,20 @@ export function PracticePage() {
         exercise={exercise}
         seed={seed}
         isLast={index === exercises.length - 1}
-        onDone={(outcome) => {
+        onDone={(outcome, attempt) => {
+          recordAttempt(attempt).catch((e: unknown) => {
+            console.error(e);
+            setSaveError('No se pudo guardar algún intento en este dispositivo (¿almacenamiento lleno o modo privado?).');
+          });
           setOutcomes((o) => [...o, outcome]);
           setIndex((i) => i + 1);
         }}
       />
+      {saveError && (
+        <p role="alert" className={styles.summaryNote}>
+          {saveError}
+        </p>
+      )}
     </>
   );
 }

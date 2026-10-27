@@ -10,6 +10,39 @@
   margin: 0 0 2rem;
 }
 
+.today {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0 2.5rem;
+}
+.todayItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+}
+a.todayItem:hover {
+  border-color: var(--accent);
+}
+.todayLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.todayMain {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
 .section {
   margin-bottom: 2.5rem;
 }
