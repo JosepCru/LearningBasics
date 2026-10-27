@@ -1,0 +1,27 @@
+# Dependencias y build
+node_modules/
+dist/
+dist-ssr/
+coverage/
+src/generated/
+
+# Variables de entorno (solo se versiona el ejemplo)
+.env
+.env.*
+!.env.example
+
+# Progreso personal y backups: nunca en Git
+*.export.json
+backups/
+
+# Supabase local
+supabase/.branches/
+supabase/.temp/
+
+# Editor y sistema
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.log
